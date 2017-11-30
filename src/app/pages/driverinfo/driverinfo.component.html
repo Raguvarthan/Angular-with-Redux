@@ -1,0 +1,94 @@
+<div class="page-details row">
+    <span class="col-sm-6">
+        <h2> Driver Info</h2>
+    </span>
+    <span class="col-sm-6 text-right">
+        <a class="addbtn" data-toggle="modal" data-target="#myModal" (click)="crudType('add');openModal(template)">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i>
+        </a>
+    </span>
+</div>
+<div class="vendor-data-table">
+    <div class="table-caption row">
+        <span class="col-sm-2">#</span>
+        <span class="col-sm-2">Driver Name</span>
+        <span class="col-sm-2">Contact No</span>
+        <span class="col-sm-2">Address</span>
+        <span class="col-sm-2">Action</span>
+    </div>
+
+    <div class="table-row row" *ngFor="let driver of driverViewData | async; let i = index;">
+        <span class="col-sm-2"> {{i + 1}}</span>
+        <span class="col-sm-2">{{driver.driverName}}</span>
+        <span class="col-sm-2">{{driver.contactNo}}</span>
+        <span class="col-sm-2">{{driver.address}}</span>
+        <span class="col-sm-2">
+            <button class="btn editbtn" (click)="openModal(template);crudType('edit',driver);"> Edit </button>
+        </span>
+    </div>
+</div>
+
+
+<!-- Bootstrap Modal -->
+
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">{{formAction}} Driver Info</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="addForm">
+            <form #f="ngForm">
+                <div class="row">
+                    <span class="col-sm-12 form-group">
+                        <span class="col-sm-6">
+                            <label>Driver Name</label>
+                        </span>
+                        <span class="col-sm-6">
+                            <input type="text" name="driverName" [(ngModel)]="driverData.driverName" placeholder="" class="form-control">
+                        </span>
+
+                        <input type="hidden" name="driverId" [(ngModel)]="driverData.driverId" class="form-control">
+                    </span>
+                </div>
+                <div class="row">
+                    <span class="col-sm-12 form-group">
+                        <span class="col-sm-6">
+                            <label> Contact No </label>
+                        </span>
+                        <span class="col-sm-6">
+                            <input type="text" name="contactNo" [(ngModel)]="driverData.contactNo" placeholder="" class="form-control">
+                        </span>
+
+                    </span>
+                </div>
+                <div class="row">
+                    <span class="col-sm-12 form-group">
+                        <span class="col-sm-6">
+                            <label> Address </label>
+                        </span>
+                        <span class="col-sm-6">
+                            <textarea name="address" [(ngModel)]="driverData.address" placeholder="" class="form-control"></textarea>
+                        </span>
+
+                    </span>
+                </div>
+                <div class="row">
+                    <span class="col-sm-6 form-group">
+                        <button *ngIf="formAction === 'Add'" class="btn savebtn" (click)="insertDriver(driverData)">
+                            <span>Save</span>                            
+                        </button>
+                        <button *ngIf="formAction === 'Edit'" class="btn savebtn" (click)="updateDriver(driverData)">                            
+                            <span>Update</span>
+                        </button>
+                    </span>
+                </div>
+            </form>
+                    <span class="col-sm-6 form-group text-right">
+                        <button type="reset" class="btn cancelbtn cancelButton" (click)="modalRef.hide()">Cancel</button>
+                    </span>
+        </div>
+    </div>
+</ng-template>

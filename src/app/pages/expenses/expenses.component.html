@@ -1,0 +1,124 @@
+<div class="page-details row">
+    <span class="col-sm-6">
+        <h2> Expenses Info</h2>
+    </span>
+    <span class="col-sm-6 text-right">
+        <a class="addbtn" data-toggle="modal" data-target="#myModal" (click)="crudType('add');openModal(template)">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i>
+        </a>
+    </span>
+</div>
+
+<div class="vendor-data-table">
+
+
+    <div class="table-caption row">
+        <span class="col-sm-2">#</span>
+        <span class="col-sm-2">Vehicle No</span>
+        <span class="col-sm-3">Entry Date</span>
+        <span class="col-sm-3">Advance</span>
+        <span class="col-sm-2">Action</span>
+    </div>
+    <accordion>
+        <div class="table-row row" *ngFor="let expenses of tripExpensesList; let i = index;">
+            <accordion-group #group [isOpen]>
+                <div accordion-heading>
+                    <span class="col-sm-2"> {{i + 1}}</span>
+                    <span class="col-sm-2">{{expenses.vehicleNo}}</span>
+                    <span class="col-sm-3">{{expenses.entryDate | date: 'M/d/yy, h:mm a'}}</span>
+                    <span class="col-sm-3">{{expenses.advanceAmount}}</span>
+                    <span class="col-sm-2">
+                        <a class=" togglebtn" *ngIf="group?.isOpen == true">
+                            <i class="fa fa-toggle-on" aria-hidden="true"></i>
+                        </a>
+                        <a class=" togglebtn" *ngIf="group?.isOpen == false">
+                            <i class="fa fa-toggle-off" aria-hidden="true"></i>
+                        </a>
+                    </span>
+                </div>
+                <div class="row no-margin">
+                    <div class="table-row row no-margin">
+                        <app-expenses-insert-update [expensesData]="expenses"></app-expenses-insert-update>
+                    </div>
+                </div>
+            </accordion-group>
+        </div>
+    </accordion>
+
+</div>
+
+
+<!-- Bootstrap Modal -->
+<!-- 
+<ng-template #template>
+  <div class="modal-header">
+      <h4 class="modal-title pull-left">{{formAction}} vendor Info</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+      </button>
+  </div>
+  <div class="modal-body">
+      <div class="addForm">
+          <form #f="ngForm">
+              <div class="row">
+                  <span class="col-sm-12 form-group">
+                      <span class="col-sm-6">
+                          <label>Vendor Name</label>
+                      </span>
+                      <span class="col-sm-6">
+                          <input type="text" name="vendorName" [(ngModel)]="vendorData.vendorName" placeholder="" class="form-control">
+                      </span>
+
+                      <input type="hidden" name="vendorId" [(ngModel)]="vendorData.vendorId" class="form-control">
+                  </span>
+              </div>
+              <div class="row">
+                  <span class="col-sm-12 form-group">
+                      <span class="col-sm-6">
+                          <label> Contact Name </label>
+                      </span>
+                      <span class="col-sm-6">
+                          <input type="text" name="contactName" [(ngModel)]="vendorData.contactName" placeholder="" class="form-control">
+                      </span>
+
+                  </span>
+              </div>
+              <div class="row">
+                  <span class="col-sm-12 form-group">
+                      <span class="col-sm-6">
+                          <label> Contact No </label>
+                      </span>
+                      <span class="col-sm-6">
+                          <input type="text" name="contactNo" [(ngModel)]="vendorData.contactNo" placeholder="" class="form-control">
+                      </span>
+
+                  </span>
+              </div>
+              <div class="row">
+                  <span class="col-sm-12 form-group">
+                      <span class="col-sm-6">
+                          <label> Vendor Address </label>
+                      </span>
+                      <span class="col-sm-6">
+                          <textarea name="vendorAddress" [(ngModel)]="vendorData.vendorAddress" placeholder="" class="form-control"></textarea>
+                      </span>
+
+                  </span>
+              </div>
+              <div class="row">
+                  <span class="col-sm-6 form-group">
+                      <button *ngIf="formAction === 'Add'" class="btn savebtn" (click)="insertVendor(vendorData)">
+                          <span>Save</span>                            
+                      </button>
+                      <button *ngIf="formAction === 'Edit'" class="btn savebtn" (click)="updateVendor(vendorData)">                            
+                          <span>Update</span>
+                      </button>
+                  </span>
+                  <span class="col-sm-6 form-group text-right">
+                      <button type="reset" class="btn cancelbtn" (click)="modalRef.hide()">Cancel</button>
+                  </span>
+              </div>
+          </form>
+      </div>
+  </div>
+</ng-template> -->

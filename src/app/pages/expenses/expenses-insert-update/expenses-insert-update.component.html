@@ -1,0 +1,420 @@
+<div class="expenses-form">
+  <h2>Trip Expenses: </h2>
+  <form>
+    <div class="form-group">
+      <span class="row col-sm-6 form-group">
+        <label class="col-sm-6">Entry Date</label>
+        <span class="col-sm-6">
+          <input class="form-control" name="entryDate" #dp="bsDatepicker" bsDatepicker [(ngModel)]="expensesData.entryDate">
+        </span>
+      </span>
+      <span class="row col-sm-6 form-group">
+        <label class="col-sm-6">Advance Amount</label>
+        <span class="col-sm-6">
+          <input class="form-control" name="advanceAmount" [(ngModel)]="expensesData.advanceAmount">
+        </span>
+      </span>
+
+      <span class="row col-sm-6 form-group">
+        <label class="col-sm-6">Start KM</label>
+        <span class="col-sm-6">
+          <input class="form-control" name="startKM" [(ngModel)]="expensesData.startKM">
+        </span>
+      </span>
+      <span class="row col-sm-6 form-group">
+        <label class="col-sm-6">End KM</label>
+        <span class="col-sm-6">
+          <input class="form-control" name="endKM" [(ngModel)]="expensesData.endKM">
+        </span>
+      </span>
+
+      <span class="row col-sm-6 form-group">
+        <label class="col-sm-6">Total KM</label>
+        <span class="col-sm-6">
+          <input class="form-control" name="totalKM" [(ngModel)]="expensesData.totalKM" disabled>
+        </span>
+      </span>
+      <span class="row col-sm-6 form-group">
+        <label class="col-sm-6">Diesel</label>
+        <span class="col-sm-6">
+          <input class="form-control" name="diesel" [(ngModel)]="expensesData.diesel" disabled>
+        </span>
+      </span>
+
+      <span class="row col-sm-6 form-group">
+        <label class="col-sm-6">Mileage</label>
+        <span class="col-sm-6">
+          <input class="form-control" name="averageMileage" [(ngModel)]="expensesData.averageMileage" disabled>
+        </span>
+      </span>
+      <span class="row col-sm-6 form-group">
+        <label class="col-sm-6">Vechile No</label>
+        <span class="col-sm-6">
+          <input class="form-control" name="vehicleNo" [(ngModel)]="expensesData.vehicleNo">
+        </span>
+      </span>
+
+      <span class="row col-sm-6 form-group">
+        <label class="col-sm-6">First driver</label>
+        <span class="col-sm-6">
+          <input class="form-control" name="driver1Name" [(ngModel)]="expensesData.driver1Name">
+        </span>
+      </span>
+      <span class="row col-sm-6 form-group">
+        <label class="col-sm-6">Second driver</label>
+        <span class="col-sm-6">
+          <input class="form-control" name="driver2Name" [(ngModel)]="expensesData.driver2Name">
+        </span>
+      </span>
+
+
+      <span class="row col-sm-6 form-group">
+        <label class="col-sm-6">Cleaner</label>
+        <span class="col-sm-6">
+          <input class="form-control" name="cleanerName" [(ngModel)]="expensesData.cleanerName">
+        </span>
+      </span>
+      <span class="row col-sm-6 form-group">
+        <label class="col-sm-6">Start Date</label>
+        <span class="col-sm-6">
+          <input class="form-control" name="startDate" #dp="bsDatepicker" bsDatepicker [(ngModel)]="expensesData.startDate">
+        </span>
+      </span>
+      <span class="row col-sm-6 form-group">
+        <label class="col-sm-6">End Date</label>
+        <span class="col-sm-6">
+          <input class="form-control" name="endDate" #dp="bsDatepicker" bsDatepicker [(ngModel)]="expensesData.endDate">
+        </span>
+      </span>
+
+
+      <div class="tripwiseexpenses row">
+        <div class="col-sm-12">
+          <h3 class="" style="display:inline-block">TripWise Expenses:</h3>
+          <i class="fa fa-plus-circle" aria-hidden="true" (click)="addTrip()"></i>
+        </div>
+
+        <span class="from-group caption">
+          <span class="col-sm-2">
+            <label class="">Date</label>
+          </span>
+          <span class="col-sm-2">
+            <label class="">From</label>
+          </span>
+          <span class="col-sm-2">
+            <label class="">To</label>
+          </span>
+          <span class="col-sm-1">
+            <label class="">Ton</label>
+          </span>
+          <span class="col-sm-1">
+            <label class="">Rent</label>
+          </span>
+          <span class="col-sm-1">
+            <label class="">Commision</label>
+          </span>
+          <span class="col-sm-1">
+            <label class="">Loading</label>
+          </span>
+          <span class="col-sm-2">
+            <label class="">Unloading</label>
+          </span>
+        </span>
+
+        <span class="from-group row" *ngFor="let tripdet of expensesData.expenses.expenseInfo.tripWiseExpenses.tripWiseExpenseDetails; let i = index">
+
+          <span class="col-sm-2 form-group">
+            <input type="text" #dp="bsDatepicker" bsDatepicker class="form-control" name="tripStartDate-{{i}}" [(ngModel)]="tripdet.tripStartDate">
+          </span>
+          <span class="col-sm-2 form-group">
+            <input type="text" class="form-control" [typeahead]="cityLocation" name="fromLocation-{{i}}" [(ngModel)]="tripdet.fromLocation">
+          </span>
+          <span class="col-sm-2 form-group">
+            <input type="text" class="form-control" [typeahead]="cityLocation" name="toLocation-{{i}}" [(ngModel)]="tripdet.toLocation">
+          </span>
+          <span class="col-sm-1 form-group">
+            <input type="text" class="form-control" name="loadInTon-{{i}}" [(ngModel)]="tripdet.loadInTon">
+          </span>
+          <span class="col-sm-1 form-group">
+            <input type="text" class="form-control" name="vehicleAmount-{{i}}" [(ngModel)]="tripdet.vehicleAmount">
+          </span>
+          <span class="col-sm-1 form-group">
+            <input type="text" class="form-control" name="commission-{{i}}" [(ngModel)]="tripdet.commission">
+          </span>
+          <span class="col-sm-1 form-group">
+            <input type="text" class="form-control" name="loadingCharges-{{i}}" [(ngModel)]="tripdet.loadingCharges">
+          </span>
+          <span class="col-sm-2 form-group">
+            <input type="text" class="form-control" name="unloadingCharges-{{i}}" [(ngModel)]="tripdet.unloadingCharges">
+          </span>
+        </span>
+      </div>
+
+      <div class="dieselexpenses row">
+        <span class="col-sm-12">
+          <h3 class="">Diesel Expenses</h3>
+        </span>
+
+        <div class="col-sm-6">
+          <span class="col-sm-12">
+            <h3 class="">Cash Diesel</h3>
+            <i class="fa fa-plus-circle" aria-hidden="true" (click)="addCashDiesel()"></i>
+          </span>
+          <div class="caption">
+            <span class="col-sm-4 form-group">
+              <label>Date</label>
+            </span>
+            <span class="col-sm-4 form-group">
+              <label>Diesel</label>
+            </span>
+            <span class="col-sm-4 form-group">
+              <label>Amount</label>
+            </span>
+          </div>
+          <div class="row" *ngFor="let cashdiesel of expensesData.expenses.expenseInfo.dieselExpenses.cashDieselExpenses.dieselExpenseDetails; let i = index">
+            <span class="col-sm-4 form-group">
+              <input type="text" class="form-control" #dp="bsDatepicker" bsDatepicker name="cashDate-{{i}}" [(ngModel)]="cashdiesel.date">
+            </span>
+            <span class="col-sm-4 form-group">
+              <input type="text" class="form-control" name="cashQuantity-{{i}}" [(ngModel)]="cashdiesel.quantity">
+            </span>
+            <span class="col-sm-4 form-group">
+              <input type="text" class="form-control" name="cashQuantity-{{i}}" [(ngModel)]="cashdiesel.amount">
+            </span>
+          </div>
+          <div class="row">
+            <span class="row">
+              <span class="col-sm-4">Total </span>
+              <span class="col-sm-4 form-group">
+                <input type="text" class="form-control" name="cashTotalQuantity" [(ngModel)]="expensesData.expenses.expenseInfo.dieselExpenses.cashDieselExpenses.totalQuantity">
+              </span>
+              <span class="col-sm-4 form-group">
+                <input type="text" class="form-control" name="cashTotalAmount" [(ngModel)]="expensesData.expenses.expenseInfo.dieselExpenses.cashDieselExpenses.totalAmount">
+              </span>
+            </span>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <span class="col-sm-12">
+            <h3 class="">CMS Diesel</h3>
+            <i class="fa fa-plus-circle" aria-hidden="true" (click)="addCMSDiesel()"></i>
+          </span>
+          <div class="caption">
+            <span class="col-sm-4 form-group">
+              <label>Date</label>
+            </span>
+            <span class="col-sm-4 form-group">
+              <label>Diesel</label>
+            </span>
+            <span class="col-sm-4 form-group">
+              <label>Amount</label>
+            </span>
+          </div>
+          <div class="row" *ngFor="let cashdiesel of expensesData.expenses.expenseInfo.dieselExpenses.cmsDieselExpenses.dieselExpenseDetails; let i = index">
+            <span class="col-sm-4 form-group">
+              <input type="text" class="form-control" #dp="bsDatepicker" bsDatepicker name="date-{{i}}" [(ngModel)]="cashdiesel.date">
+            </span>
+            <span class="col-sm-4 form-group">
+              <input type="text" class="form-control" name="quantity-{{i}}" [(ngModel)]="cashdiesel.quantity">
+            </span>
+            <span class="col-sm-4 form-group">
+              <input type="text" class="form-control" name="quantity-{{i}}" [(ngModel)]="cashdiesel.amount">
+            </span>
+          </div>
+          <div class="row">
+            <span class="row">
+              <span class="col-sm-4">Total </span>
+              <span class="col-sm-4 form-group">
+                <input type="text" class="form-control" name="totalQuantity" [(ngModel)]="expensesData.expenses.expenseInfo.dieselExpenses.cmsDieselExpenses.totalQuantity">
+              </span>
+              <span class="col-sm-4 form-group">
+                <input type="text" class="form-control" name="totalAmount" [(ngModel)]="expensesData.expenses.expenseInfo.dieselExpenses.cmsDieselExpenses.totalAmount">
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="billableExpenses row">
+        <span class="col-sm-12">
+          <h3 class="">Billable Expenses</h3>
+          <i class="fa fa-plus-circle" aria-hidden="true" (click)="addBillable()"></i>
+        </span>
+        <span class="form-group caption">
+          <span class="col-sm-4">
+            <label>#</label>
+          </span>
+          <span class="col-sm-4">
+            <label>Expenses Name</label>
+          </span>
+          <span class="col-sm-4">
+            <label>Amount</label>
+          </span>
+        </span>
+        <span class="form-group row" *ngFor="let billexpenses of expensesData.expenses.expenseInfo.billableExpenses.billableExpenseDetails; let j = index;">
+          <span class="col-sm-4 form-group">{{j + 1}}</span>
+          <span class="col-sm-4 form-group">
+            <input type="text" class="form-control" name="expenseName-{{j}}" [(ngModel)]="billexpenses.expenseName">
+          </span>
+          <span class="col-sm-4 form-group">
+            <input type="text" class="form-control" name="amount-{{j}}" [(ngModel)]="billexpenses.amount">
+          </span>
+        </span>
+        <span class="form-group row">
+          <span class="col-sm-4">Total</span>
+          <span class="col-sm-4"></span>
+          <span class="col-sm-4 form-group">
+            <input type="text" class="form-control" name="totalBillableExpenses" [(ngModel)]="expensesData.expenses.expenseInfo.billableExpenses.totalBillableExpenses">
+          </span>
+        </span>
+      </div>
+
+
+      <div class="row">
+        <span class="col-sm-6">
+
+          <div class="PCexpenses">
+            <span class="col-sm-12">
+              <h3 class="">PC Expenses</h3>
+              <i class="fa fa-plus-circle" aria-hidden="true" (click)="addPCexpenses()"></i>
+            </span>
+
+            <span class="form-group caption">
+              <span class="col-sm-4">
+                <label>#</label>
+              </span>
+              <span class="col-sm-4">
+                <label>Place</label>
+              </span>
+              <span class="col-sm-4">
+                <label>Amount</label>
+              </span>
+            </span>
+            <span class="form-group row" *ngFor="let pcexpenses of expensesData.expenses.expenseInfo.pcExpenses.expenseDetails; let k = index;">
+              <span class="col-sm-4 form-group">{{k + 1}}</span>
+              <span class="col-sm-4 form-group">
+                <input type="text" class="form-control" [typeahead]="cityLocation" name="place-{{k}}" [(ngModel)]="pcexpenses.place">
+              </span>
+              <span class="col-sm-4">
+                <input type="text" class="form-control" name="amount-{{k}}" [(ngModel)]="pcexpenses.amount">
+              </span>
+            </span>
+            <span class="form-group row">
+              <span class="col-sm-4">Total</span>
+              <span class="col-sm-4"></span>
+              <span class="col-sm-4 form-group">
+                <input type="text" class="form-control" name="totalExpenses" [(ngModel)]="expensesData.expenses.expenseInfo.pcExpenses.totalExpenses">
+              </span>
+            </span>
+          </div>
+        </span>
+        <span class="col-sm-6">
+          <div class="RTOexpenses">
+            <span class="col-sm-12">
+              <h3 class="">RTO Expenses</h3>
+              <i class="fa fa-plus-circle" aria-hidden="true" (click)="addRtoExpenses()"></i>
+            </span>
+            <span class="form-group caption">
+              <span class="col-sm-4">
+                <label>#</label>
+              </span>
+              <span class="col-sm-4">
+                <label>Place</label>
+              </span>
+              <span class="col-sm-4">
+                <label>Amount</label>
+              </span>
+            </span>
+            <span class="form-group row" *ngFor="let rtoexpenses of expensesData.expenses.expenseInfo.rtoExpenses.expenseDetails; let k = index;">
+              <span class="col-sm-4 form-group">{{k + 1}}</span>
+              <span class="col-sm-4 form-group">
+                <input type="text" class="form-control" [typeahead]="cityLocation" name="place-{{k}}" [(ngModel)]="rtoexpenses.place">
+              </span>
+              <span class="col-sm-4 form-group">
+                <input type="text" class="form-control" name="amount-{{k}}" [(ngModel)]="rtoexpenses.amount">
+              </span>
+            </span>
+            <span class="form-group row">
+              <span class="col-sm-4">Total</span>
+              <span class="col-sm-4"></span>
+              <span class="col-sm-4 form-group">
+                <input type="text" class="form-control" name="totalExpenses" [(ngModel)]="expensesData.expenses.expenseInfo.rtoExpenses.totalExpenses">
+              </span>
+            </span>
+          </div>
+        </span>
+      </div>
+
+
+
+      <div class="totalExpenses row">
+        <div class="col-sm-12">
+          <h3>Total Expenses</h3>
+        </div>
+
+        <span class="form-group">
+          <span class="col-sm-6 form-group">
+            <label>Cleaner Bata</label>
+          </span>
+          <span class="col-sm-6 form-group">
+            <input type="text" class="form-control" name="cleanerBata" [(ngModel)]="expensesData.expenses.expenseInfo.cleanerBata">
+          </span>
+        </span>
+        <span class="form-group">
+          <span class="col-sm-6 form-group">
+            <label>Driver Bata</label>
+          </span>
+          <span class="col-sm-6 form-group">
+            <input type="text" class="form-control" name="driverBata" [(ngModel)]="expensesData.expenses.expenseInfo.driverBata">
+          </span>
+        </span>
+        <span class="form-group">
+          <span class="col-sm-6 form-group">
+            <label>Driver Bonus</label>
+          </span>
+          <span class="col-sm-6 form-group">
+            <input type="text" class="form-control" name="driverBonus" [(ngModel)]="expensesData.expenses.expenseInfo.driverBonus">
+          </span>
+        </span>
+        <span class="form-group">
+          <span class="col-sm-6 form-group">
+            <label>Toll Expenses</label>
+          </span>
+          <span class="col-sm-6 form-group">
+            <input type="text" class="form-control" name="tollExpenses" [(ngModel)]="expensesData.expenses.expenseInfo.tollExpenses">
+          </span>
+        </span>
+        <span class="form-group">
+          <span class="col-sm-6 form-group">
+            <label>Balance Amount</label>
+          </span>
+          <span class="col-sm-6 form-group">
+            <input type="text" class="form-control" name="balanceAmount" [(ngModel)]="expensesData.expenses.balanceAmount">
+          </span>
+        </span>
+        <span class="form-group">
+          <span class="col-sm-6 form-group">
+            <label>Total Expenses</label>
+          </span>
+          <span class="col-sm-6 form-group">
+            <input type="text" class="form-control" name="totalExpenses" [(ngModel)]="expensesData.expenses.totalExpenses">
+          </span>
+        </span>
+        <span class="form-group">
+          <span class="col-sm-6 form-group">
+            <label>Total Income</label>
+          </span>
+          <span class="col-sm-6 form-group">
+            <input type="text" class="form-control" name="totalIncome" [(ngModel)]="expensesData.expenses.totalIncome">
+          </span>
+        </span>
+      </div>
+    </div>
+    <div class="row form-group">
+        <span class="col-sm-6">
+          <button class="editbtn btn">Update</button>      
+          <button class="cancelbtn btn">Cancel</button>
+        </span>  
+      </div>
+  </form>
+</div>

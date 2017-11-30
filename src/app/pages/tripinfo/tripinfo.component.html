@@ -1,0 +1,67 @@
+<div class="page-details row">
+  <span class="col-sm-6">
+    <h2> Trip Info </h2>
+  </span>
+  <span class="col-sm-6 text-right">
+    <a class="addbtn" data-toggle="modal" data-target="#myModal" (click)="addTrip(); openModal(template)">
+      <i class="fa fa-plus-circle" aria-hidden="true"></i>
+    </a>
+  </span>
+</div>
+<div class="vendor-data-table">
+  <div class="table-caption row no-margin">
+    <span class="col-sm-1">#</span>
+    <span class="col-sm-3">Vendor Name</span>
+    <span class="col-sm-3">Vehicle No</span>
+    <span class="col-sm-3">Load Date</span>
+    <span class="col-sm-1">Action</span>
+  </div>
+  <accordion>
+
+    <div class="table-row row no-margin" *ngFor="let trip of tripInfo | async; let i = index;">
+      <accordion-group #group [isOpen]>
+        <div accordion-heading>
+          <span class="col-sm-1"> {{i + 1}}</span>
+          <span class="col-sm-3">{{trip.vendorName}}</span>
+          <span class="col-sm-3">{{trip.vehicleNo}}</span>
+          <span class="col-sm-3">{{trip.loadDate | date: 'M/d/yy, h:mm a' }}</span>
+          <span class="col-sm-1">
+            <a class=" togglebtn" *ngIf="group?.isOpen == true">
+              <i class="fa fa-toggle-on" aria-hidden="true"></i>
+            </a>
+            <a class=" togglebtn" *ngIf="group?.isOpen == false">
+              <i class="fa fa-toggle-off" aria-hidden="true"></i>
+            </a>
+          </span>
+        </div>
+        <div class="row no-margin">
+          <div class="table-row row no-margin">
+            <app-trip-insert-update [tripData]="trip" [actionType]="updateAction" [vendorData]="vendorData" [vehicleData]="vehicleData" [cityLocation]="cityLocation" (cancelClicked)="group.isOpen = false">
+
+            </app-trip-insert-update>
+          </div>
+        </div>
+      </accordion-group>
+    </div>
+  </accordion>
+</div>
+
+
+
+
+  <!-- Bootstrap Modal -->
+  
+  <ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left"> Add New Trip</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <app-trip-insert-update [actionType]="addAction" [vendorData]="vendorData" [vehicleData]="vehicleData" [cityLocation]="cityLocation" (cancelClicked)="modalRef.hide()">
+
+        </app-trip-insert-update>
+    </div>
+</ng-template>
+

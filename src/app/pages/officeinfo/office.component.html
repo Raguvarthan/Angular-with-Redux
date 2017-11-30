@@ -1,0 +1,107 @@
+<div class="page-details row">
+    <span class="col-sm-6">
+        <h2> Office Info</h2>
+    </span>
+    <span class="col-sm-6 text-right">
+        <a class="addbtn" data-toggle="modal" data-target="#myModal" (click)="crudType('add');openModal(template)">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i>
+        </a>
+    </span>
+</div>
+<div class="office-data-table">
+    <div class="table-caption row">
+        <span class="col-sm-1">#</span>
+        <span class="col-sm-1">Office Name</span>
+        <span class="col-sm-2">Contact Name</span>
+        <span class="col-sm-2">Contact Number</span>
+        <span class="col-sm-2">Address</span>
+        <span class="col-sm-1">Edit</span>
+    </div>
+
+    <div class="table-row row" *ngFor="let office of officeViewData | async; let i = index;">
+        <span class="col-sm-1"> {{i + 1}}</span>
+        <span class="col-sm-1">{{office.officeName}}</span>
+        <span class="col-sm-2">{{office.contactName}}</span>
+        <span class="col-sm-2">{{office.contactNo}}</span>
+        <span class="col-sm-2">{{office.address}}</span>
+        <span class="col-sm-1">
+            <button class="btn editbtn" (click)="openModal(template);crudType('edit',office);"> Edit </button>
+        </span>
+    </div>
+</div>
+
+
+<!-- Bootstrap Modal -->
+
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">{{formAction}} Office Info</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="addForm">
+            <form #f="ngForm">
+                <div class="row">
+                    <span class="col-sm-12 form-group">
+                        <span class="col-sm-6">
+                            <label> Office Name </label>
+                        </span>
+                        <span class="col-sm-6">
+                            <input type="text" name="officeName" [(ngModel)]="officeData.officeName" placeholder="" class="form-control">
+                        </span>
+                        <input type="hidden" name="officeId" [(ngModel)]="officeData.officeId" class="form-control">
+                    </span>
+                </div>
+                <div class="row">
+                    <span class="col-sm-12 form-group">
+                        <span class="col-sm-6">
+                            <label> Contact Name </label>
+                        </span>
+                        <span class="col-sm-6">
+                            <input type="text" name="contactName" [(ngModel)]="officeData.contactName" placeholder="" class="form-control">
+                        </span>
+                    </span>
+                </div>
+                <div class="row">
+                    <span class="col-sm-12 form-group">
+                        <span class="col-sm-6">
+                            <label>Contact Number </label>
+                        </span>
+                        <span class="col-sm-6">
+                            <input type="text" name="contactNo" [(ngModel)]="officeData.contactNo" placeholder="" class="form-control">
+                        </span>
+                    </span>
+                </div>
+                <div class="row">
+                    <span class="col-sm-12 form-group">
+                        <span class="col-sm-6">
+                            <label>Address</label>
+                        </span>
+                        <span class="col-sm-6">
+                            <input type="text" name="address" [(ngModel)]="officeData.address" placeholder="" class="form-control">
+                        </span>
+                    </span>
+                </div>
+                <div class="row">
+                    <span class="col-sm-6 form-group">
+                        <div *ngIf="formAction === 'Add'">
+                        <button class="btn savebtn" (click)="insertoffice(officeData)">
+                            <span>Save</span>                            
+                        </button>
+                        </div>
+                        <div *ngIf="formAction === 'Edit'">
+                        <button class="btn savebtn" (click)="updateoffice(officeData)">
+                            <span>Update</span>                            
+                        </button>
+                        </div>
+                    </span>                    
+                </div>
+            </form>
+            <span class="col-sm-6 form-group text-right">
+            <button type="reset" class="btn cancelbtn cancelButton" (click)="modalRef.hide()">Cancel</button>
+            </span>
+        </div>
+    </div>
+</ng-template>

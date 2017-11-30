@@ -1,0 +1,53 @@
+<div class="page-details row">
+  <span class="col-sm-6">
+    <h2> Vehicle Payment</h2>
+  </span>
+  <span class="col-sm-6 text-right">
+
+  </span>
+</div>
+<div class="vehicle-data-table">
+  <div class="table-caption row no-margin">
+    <span class="col-sm-1">#</span>
+    <span class="col-sm-3">Vehicle No</span>
+    <span class="col-sm-3">Total Amount</span>
+    <span class="col-sm-3">Pending Amount</span>
+    <span class="col-sm-1">Action</span>
+  </div>
+  <accordion>
+    
+      <div class="table-row row no-margin" *ngFor="let vehicle of vehiclePaymentViewData; let i = index;">
+          <accordion-group #group [isOpen]>
+        <div accordion-heading>
+          <span class="col-sm-1"> {{i + 1}}</span>
+          <span class="col-sm-3">{{vehicle.vehicleNo}}</span>
+          <span class="col-sm-3">{{vehicle.totalAmt}}</span>
+          <span class="col-sm-3">{{vehicle.pendingAmt}}</span>
+          <span class="col-sm-1">
+            <a class=" togglebtn" *ngIf="group?.isOpen == true"> 
+              <i class="fa fa-toggle-on" aria-hidden="true"></i> 
+            </a>
+            <a class=" togglebtn" *ngIf="group?.isOpen == false">
+                <i class="fa fa-toggle-off" aria-hidden="true"></i>
+            </a>
+          </span>
+        </div>
+        <div class="row no-margin">
+          <div class="table-caption row no-margin">
+            <span class="col-sm-1">#</span>
+            <span class="col-sm-2">Vendor Name</span>
+            <span class="col-sm-2">Pickup Date</span>
+            <span class="col-sm-2">Dorp Date</span>
+            <span class="col-sm-2">Total Amount</span>
+            <span class="col-sm-2">Pending Amount</span>
+            <span class="col-sm-1">Action</span>
+          </div>
+          <div class="table-row row no-margin"  *ngFor="let vehicleTrip of vehicle.tripData; let itemIndex = index;">
+            <app-vehicletrip [tripData]="vehicleTrip" [itemIndex]="itemIndex"></app-vehicletrip>
+          </div>
+        </div>
+      </accordion-group>
+      </div>    
+  </accordion>
+</div>
+

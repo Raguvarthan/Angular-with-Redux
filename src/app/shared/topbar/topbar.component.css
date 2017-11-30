@@ -1,0 +1,29 @@
+.topbar{
+    padding: 15px 5px;
+    background-color: #344563;
+    position: fixed;
+    height: 60px;
+    width: 100%;
+    z-index: 1;
+}
+
+.logo {
+    color:#091E42;
+    font-weight: 700;
+}
+
+.logo .text{
+    color:#fff;
+    
+}
+
+.circle{
+border-radius:50%;
+background-color: #fff;
+padding:10px;
+font-size:20px;
+}
+
+.user .fa{
+    font-size: 25px
+}

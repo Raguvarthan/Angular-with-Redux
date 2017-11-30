@@ -1,0 +1,93 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Common Style */
+.cancelButton{
+margin-top: -75px;
+}
+
+.no-margin{
+    margin: 0;    
+}
+
+.no-padding{
+    padding: 0;
+}
+
+.yes-padding{
+    padding: 0 40px;
+}
+
+/* Data list style */
+
+.table-caption{
+    border: solid 1px #ececec;
+    padding:10px 0;
+    background-color:#f7f7f9;
+}
+
+.table-row{
+    border-bottom: solid 1px #ececec;
+    padding:10px 0;
+    vertical-align: middle;
+}
+
+/* button style */
+
+.addbtn .fa{
+    font-size: 40px;    
+}
+
+.addbtn{
+    display:inline-block;
+    padding:15px 0;
+    vertical-align:middle;
+    cursor: pointer;
+}
+
+.btn{
+    outline: none;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.editbtn,
+.editbtn:active,
+.editbtn:focus,
+.editbtn:hover{
+    background-color: #FF5630;
+    color: #fff;
+    outline: none;  
+}
+
+.editbtn:hover{
+    background-color: #36B37E;
+}
+
+.savebtn{
+    background-color: #0052CC;
+    color: #fff;
+}
+
+.cancelbtn{
+    background-color: #36B37E;
+    color: #fff;
+}
+
+.togglebtn {
+    font-size: 30px;
+}
+
+.togglebtn .fa-toggle-off,
+.togglebtn .fa-toggle-on{
+    color:  #36B37E;    
+}
+
+/* Accordion style */
+
+.panel-default>.panel-heading{
+    display: table;
+    width: 100%;
+    overflow: hidden;   
+    line-height: 30px;
+}
+

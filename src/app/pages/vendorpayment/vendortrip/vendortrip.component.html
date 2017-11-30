@@ -1,0 +1,45 @@
+<span class="col-sm-1">{{itemIndex + 1}}</span>
+<span class="col-sm-2">{{tripData.vehicleNo}}</span>
+<span class="col-sm-2">{{tripData.pickupDate}}</span>
+<span class="col-sm-2">{{tripData.dropDate}}</span>
+<span class="col-sm-2">{{tripData.totalAmt}}</span>
+<span class="col-sm-2">{{tripData.pendingAmt}}</span>
+<span class="col-sm-1">
+  <button class="btn editbtn" data-toggle="modal" data-target="#myModal" (click)="openModal(template)"> Edit </button>
+</span>
+
+
+<!-- Bootstrap Modal -->
+
+<ng-template #template>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Vendor Pending Amount</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <form #f="ngForm">
+            <div class="row form-group">
+              <span class="col-sm-6">Date: </span>
+              <span class="col-sm-6">
+                <input type="date" name="vehicle-padate" class="form-control">
+              </span>
+            </div>
+            <div class="row form-group">
+              <span class="col-sm-6">Pending amount: </span>
+              <span class="col-sm-6">
+                <input type="text" name="vehicle-pamt" class="form-control">
+              </span>
+            </div>  
+            <div class="row form-group">
+              <span class="col-sm-6 text-left">
+                <button class="btn editbtn">Update</button>
+              </span>
+              <span class="col-sm-6 text-right">
+                  <button class="btn cancelbtn" (click)="modalRef.hide()">Cancel</button>
+                </span>
+            </div>
+          </form>
+    </div>
+  </ng-template>

@@ -1,0 +1,573 @@
+{
+  "vehicle": [
+    {
+      "id": 0,
+      "vehicleNo": "TN-59-U-9807",
+      "vehicleType": "Lorry",
+      "vehicleNoWheel": "1",
+      "vehicleCapacity": "1ton"
+    },
+    {
+      "id": 1,
+      "vehicleNo": "TN-59-U-9808",
+      "vehicleType": "Lorry",
+      "vehicleNoWheel": 4,
+      "vehicleCapacity": "1ton"
+    },
+    {
+      "id": 2,
+      "vehicleNo": "TN-59-U-9809",
+      "vehicleType": "Lorry",
+      "vehicleNoWheel": 4,
+      "vehicleCapacity": "1ton"
+    },
+    {
+      "id": 3,
+      "vehicleNo": "TN-59-U-9807",
+      "vehicleType": "Lorry",
+      "vehicleNoWheel": 4,
+      "vehicleCapacity": "1ton"
+    },
+    {
+      "id": 4,
+      "vehicleNo": "TN-59-U-9807",
+      "vehicleType": "Lorry",
+      "vehicleNoWheel": "2",
+      "vehicleCapacity": "1ton"
+    }
+  ],
+  "vendor": [
+    {
+      "id": 1,
+      "vendorName": "Raja Transport",
+      "vendorAddress": "New Car street",
+      "contactName": "Raja",
+      "contactNo": "9944217751"
+    },
+    {
+      "id": 2,
+      "vendorName": "Ravi Transport",
+      "vendorAddress": "New Car street",
+      "contactName": "Ravi",
+      "contactNo": "9944217754"
+    },
+    {
+      "id": 3,
+      "vendorName": "Mani Transport",
+      "vendorAddress": "New Car street",
+      "contactName": "Mani",
+      "contactNo": "9944217755"
+    },
+    {
+      "id": 4,
+      "vendorName": "Selvam Transport",
+      "vendorAddress": "New Car street",
+      "contactName": "Selvam",
+      "contactNo": "9944217756"
+    },
+    {
+      "id": 5,
+      "vendorName": "Mathan Transport",
+      "vendorAddress": "New Car street",
+      "contactName": "Mathan",
+      "contactNo": "9944217757"
+    },
+    {
+      "id": 6,
+      "vendorName": "Dhinesh Transport",
+      "vendorAddress": "New Car street",
+      "contactName": "Dhinesh",
+      "contactNo": "9944217752"
+    },
+    {
+      "id": 7,
+      "vendorName": "KPN Transport",
+      "vendorAddress": "New Car street",
+      "contactName": "Kannan",
+      "contactNo": "9944217759"
+    },
+    {
+      "id": 8,
+      "vendorName": "Raja Transportss",
+      "vendorAddress": "G.K.S Nagar",
+      "contactNo": "8056665812",
+      "contactName": "Shivas Castle"
+    }
+  ],
+  "office": [
+    {
+      "id": "5a141bf5315acf1c30c629d0",
+      "officeId": "OF-4",
+      "officeName": "OfficeName",
+      "contactName": "ContactNam",
+      "contactNo": "9112341231",
+      "address": "Address"
+    },
+    {
+      "id": "5a141bf5315acf1c30c62120",
+      "officeId": "OF-5",
+      "officeName": "OfficeName",
+      "contactName": "ContactName",
+      "contactNo": 9112341234,
+      "address": "Address"
+    },
+    {
+      "id": "5a141bf5315acf1c30c123d0",
+      "officeId": "OF-6",
+      "officeName": "OfficeName",
+      "contactName": "ContactName",
+      "contactNo": 9112341234,
+      "address": "Address"
+    },
+    {
+      "id": "5a141bf5315acf1c334529d0",
+      "officeId": "OF-7",
+      "officeName": "OfficeName",
+      "contactName": "ContactName",
+      "contactNo": 9112341234,
+      "address": "Addr  "
+    }
+  ],
+  "vehiclePayment": [
+    {
+      "id": 1,
+      "vehicleNo": "TN-59-U-9807",
+      "totalAmt": 1000,
+      "pendingAmt": 500,
+      "tripData": [
+        {
+          "vendorName": "Dhinesh Transport",
+          "pickupDate": "24-07-2017",
+          "dropDate": "28-07-2017",
+          "totalAmt": 1000,
+          "pendingAmt": 500
+        },
+        {
+          "vendorName": "Ravi Transport",
+          "pickupDate": "24-07-2017",
+          "dropDate": "28-07-2017",
+          "totalAmt": 1000,
+          "pendingAmt": 500
+        },
+        {
+          "vendorName": "Mani Transport",
+          "pickupDate": "24-07-2017",
+          "dropDate": "28-07-2017",
+          "totalAmt": 1000,
+          "pendingAmt": 500
+        },
+        {
+          "vendorName": "Mathan Transport",
+          "pickupDate": "24-07-2017",
+          "dropDate": "28-07-2017",
+          "totalAmt": 1000,
+          "pendingAmt": 500
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "vehicleNo": "TN-59-U-9809",
+      "totalAmt": 1000,
+      "pendingAmt": 500,
+      "tripData": [
+        {
+          "vendorName": "Dhinesh Transport",
+          "pickupDate": "24-07-2017",
+          "dropDate": "28-07-2017",
+          "totalAmt": 1000,
+          "pendingAmt": 500
+        },
+        {
+          "vendorName": "Ravi Transport",
+          "pickupDate": "24-07-2017",
+          "dropDate": "28-07-2017",
+          "totalAmt": 1000,
+          "pendingAmt": 500
+        },
+        {
+          "vendorName": "Mani Transport",
+          "pickupDate": "24-07-2017",
+          "dropDate": "28-07-2017",
+          "totalAmt": 1000,
+          "pendingAmt": 500
+        },
+        {
+          "vendorName": "Mathan Transport",
+          "pickupDate": "24-07-2017",
+          "dropDate": "28-07-2017",
+          "totalAmt": 1000,
+          "pendingAmt": 500
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "vehicleNo": "TN-59-U-9808",
+      "totalAmt": 1000,
+      "pendingAmt": 500,
+      "tripData": [
+        {
+          "vendorName": "Dhinesh Transport",
+          "pickupDate": "24-07-2017",
+          "dropDate": "28-07-2017",
+          "totalAmt": 1000,
+          "pendingAmt": 500
+        },
+        {
+          "vendorName": "Ravi Transport",
+          "pickupDate": "24-07-2017",
+          "dropDate": "28-07-2017",
+          "totalAmt": 1000,
+          "pendingAmt": 500
+        },
+        {
+          "vendorName": "Mani Transport",
+          "pickupDate": "24-07-2017",
+          "dropDate": "28-07-2017",
+          "totalAmt": 1000,
+          "pendingAmt": 500
+        },
+        {
+          "vendorName": "Mathan Transport",
+          "pickupDate": "24-07-2017",
+          "dropDate": "28-07-2017",
+          "totalAmt": 1000,
+          "pendingAmt": 500
+        }
+      ]
+    }
+  ],
+  "vendorPayment": [
+    {
+      "id": 1,
+      "vendorName": "Dhinesh Transport",
+      "totalAmt": 1000,
+      "pendingAmt": 500,
+      "tripData": [
+        {
+          "vehicleNo": "TN-59-U-9807",
+          "pickupDate": "24-07-2017",
+          "dropDate": "28-07-2017",
+          "totalAmt": 1000,
+          "pendingAmt": 500
+        },
+        {
+          "vehicleNo": "TN-59-U-9808",
+          "pickupDate": "24-07-2017",
+          "dropDate": "28-07-2017",
+          "totalAmt": 1000,
+          "pendingAmt": 500
+        },
+        {
+          "vehicleNo": "TN-59-U-9809",
+          "pickupDate": "24-07-2017",
+          "dropDate": "28-07-2017",
+          "totalAmt": 1000,
+          "pendingAmt": 500
+        },
+        {
+          "vehicleNo": "TN-59-U-9887",
+          "pickupDate": "24-07-2017",
+          "dropDate": "28-07-2017",
+          "totalAmt": 1000,
+          "pendingAmt": 500
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "vendorName": "Ravi Transport",
+      "totalAmt": 1000,
+      "pendingAmt": 500,
+      "tripData": [
+        {
+          "vehicleNo": "TN-59-U-9807",
+          "pickupDate": "24-07-2017",
+          "dropDate": "28-07-2017",
+          "totalAmt": 1000,
+          "pendingAmt": 500
+        },
+        {
+          "vehicleNo": "TN-59-U-9887",
+          "pickupDate": "24-07-2017",
+          "dropDate": "28-07-2017",
+          "totalAmt": 1000,
+          "pendingAmt": 500
+        },
+        {
+          "vehicleNo": "TN-59-U-9877",
+          "pickupDate": "24-07-2017",
+          "dropDate": "28-07-2017",
+          "totalAmt": 1000,
+          "pendingAmt": 500
+        },
+        {
+          "vehicleNo": "TN-59-U-9867",
+          "pickupDate": "24-07-2017",
+          "dropDate": "28-07-2017",
+          "totalAmt": 1000,
+          "pendingAmt": 500
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "vendorName": "Mani Transport",
+      "totalAmt": 1000,
+      "pendingAmt": 500,
+      "tripData": [
+        {
+          "vehicleNo": "TN-59-U-9867",
+          "pickupDate": "24-07-2017",
+          "dropDate": "28-07-2017",
+          "totalAmt": 1000,
+          "pendingAmt": 500
+        },
+        {
+          "vehicleNo": "TN-59-U-9857",
+          "pickupDate": "24-07-2017",
+          "dropDate": "28-07-2017",
+          "totalAmt": 1000,
+          "pendingAmt": 500
+        },
+        {
+          "vehicleNo": "TN-59-U-9847",
+          "pickupDate": "24-07-2017",
+          "dropDate": "28-07-2017",
+          "totalAmt": 1000,
+          "pendingAmt": 500
+        },
+        {
+          "vehicleNo": "TN-59-U-9887",
+          "pickupDate": "24-07-2017",
+          "dropDate": "28-07-2017",
+          "totalAmt": 1000,
+          "pendingAmt": 500
+        }
+      ]
+    }
+  ],
+  "tripInfo": [
+    {
+      "id": 1,
+      "loadDate": "24-Dec-2017",
+      "vehicleNo": "TN-59-U-9887",
+      "location": {
+        "from": "Coimbatore",
+        "to": "Madurai",
+        "thaluka": "North Coimbatore"
+      },
+      "vendorName": "Dhinesh Transport",
+      "ton": 20,
+      "rate": 10,
+      "totalAmt": 200,
+      "crossing": 2,
+      "vehicleAmt": 16000,
+      "typeofPayment": "advance",
+      "advanceAmt": 1600,
+      "advance": {
+        "driverAccepted": 2000,
+        "selfAccount": 1400,
+        "paid": 2000,
+        "balance": 11000
+      },
+      "toPay": {}
+    },
+    {
+      "id": 2,
+      "loadDate": "25-Nov-2017",
+      "vehicleNo": "TN-59-U-9987",
+      "location": {
+        "from": "Coimbatore",
+        "to": "Madurai",
+        "thaluka": "North Coimbatore"
+      },
+      "vendorName": "Mathan Transport",
+      "ton": 20,
+      "rate": 10,
+      "totalAmt": 200,
+      "crossing": 2,
+      "vehicleAmt": 16000,
+      "typeofPayment": "advance",
+      "advanceAmt": 1600,
+      "advance": {
+        "driverAccepted": 2000,
+        "selfAccount": 1400,
+        "paid": 2000,
+        "balance": 11000
+      },
+      "toPay": {}
+    },
+    {
+      "id": 3,
+      "loadDate": "28-Aug-2017",
+      "vehicleNo": "TN-59-U-9787",
+      "location": {
+        "from": "Coimbatore",
+        "to": "Madurai",
+        "thaluka": "North Coimbatore"
+      },
+      "vendorName": "Dhinesh Transport",
+      "ton": 20,
+      "rate": 10,
+      "totalAmt": 200,
+      "crossing": 2,
+      "vehicleAmt": 16000,
+      "typeofPayment": "advance",
+      "advanceAmt": 1600,
+      "advance": {
+        "driverAccepted": 2000,
+        "selfAccount": 1400,
+        "paid": 2000,
+        "balance": 11000
+      },
+      "toPay": {}
+    }
+  ],
+  "tripExpenses":[
+    {
+      "tripExpenseId": "TRE-123456",
+      "vehicleNo": "TN-38-U-9807",
+      "entryDate": "2017-11-25T08:11:00.1137492Z",
+      "advanceAmount": 87000,
+      "driver1Name": "Driver1Name",
+      "driver2Name": "Driver2Name",
+      "cleanerName": "CleanerName",
+      "startDate": "2017-11-10T08:11:00.1137492Z",
+      "endDate": "2017-11-25T08:11:00.1137492Z",
+      "averageMileage": 4,
+      "startKM": 100000,
+      "endKM": 101000,
+      "expenses": {
+        "totalIncome": 333300,
+        "totalExpenses": 175695,
+        "balanceAmount": 157605,
+        "expenseInfo": {
+          "dieselExpense": {
+            "totalQuantity": 1000,
+            "totalAmount": 60000,
+            "cmsDieselExpenses": {
+              "totalQuantity": 900,
+              "totalAmount": 54000,
+              "dieselExpenseDetails": [
+                {
+                  "date": "2017-11-10T08:11:00.1137492Z",
+                  "quantity": 480,
+                  "amount": 18208
+                },
+                {
+                  "date": "2017-11-20T08:11:00.1137492Z",
+                  "quantity": 483,
+                  "amount": 28407
+                }
+              ]
+            },
+            "cashDieselExpenses": {
+              "totalQuantity": 100,
+              "totalAmount": 6000,
+              "dieselExpenseDetails": [
+                {
+                  "date": "2017-11-15T08:11:00.1137492Z",
+                  "quantity": 280,
+                  "amount": 16353
+                }
+              ]
+            }
+          },
+          "tripWiseExpenses": {
+            "totalLoadInTon": 50,
+            "totalVehicleAmount": 333300,
+            "totalCommission": 16665,
+            "totalLoadingCharges": 1350,
+            "totalUnloadingCharges": 1400,
+            "tripWiseExpenseDetails": [
+              {
+                "tripStartDate": "2017-11-10T08:11:00.1137492Z",
+                "fromLocation": "FirstLocation",
+                "toLocation": "SecondLocation",
+                "loadInTon": 10,
+                "vehicleAmount": 130000,
+                "commission": 5000,
+                "loadingCharges": 350,
+                "unloadingCharges": 400
+              },
+              {
+                "tripStartDate": "2017-11-15T08:11:00.1137492Z",
+                "fromLocation": "SecondLocation",
+                "toLocation": "ThirdLocation",
+                "loadInTon": 10,
+                "vehicleAmount": 100000,
+                "commission": 5000,
+                "loadingCharges": 500,
+                "unloadingCharges": 500
+              },
+              {
+                "tripStartDate": "2017-11-20T08:11:00.1137492Z",
+                "fromLocation": "ThirdLocation",
+                "toLocation": "FirstLocation",
+                "loadInTon": 30,
+                "vehicleAmount": 198300,
+                "commission": 6665,
+                "loadingCharges": 500,
+                "unloadingCharges": 500
+              }
+            ]
+          },
+          "rtoExpenses": {
+            "totalExpense": 9200,
+            "expenseDetails": [
+              {
+                "place": "FirstLocation",
+                "amount": 4000
+              },
+              {
+                "place": "ThirdLocation",
+                "amount": 5200
+              }
+            ]
+          },
+          "pcExpenses": {
+            "totalExpense": 1720,
+            "expenseDetails": [
+              {
+                "place": "SecondLocation",
+                "amount": 1720
+              }
+            ]
+          },
+          "tollExpenses": 33159,
+          "driverBata": 30000,
+          "cleanerBata": 6663,
+          "driverBonus": 0,
+          "billableExpenses": {
+            "totalBillableExpenses": 710,
+            "billableExpenseDetails": [
+              {
+                "expenseName": "Tyre purchase",
+                "amount": 710
+              }
+            ]
+          },
+          "otherexpenses": {
+            "totalOtherExpenses": 1760,
+            "totalOtherExpenseDetails": [
+              {
+                "expenseName": "Pooja Expense",
+                "amount": 400
+              },
+              {
+                "expenseName": "Tube valve pin",
+                "amount": 360
+              },
+              {
+                "expenseName": "Weight",
+                "amount": 700
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

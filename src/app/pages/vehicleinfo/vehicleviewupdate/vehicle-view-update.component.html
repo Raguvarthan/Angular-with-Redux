@@ -1,0 +1,111 @@
+<div class="">
+
+  <form #f="ngForm">
+    <div class="row form-group">
+      <span class="col-sm-3">
+        <label> Vehicle Number</label>
+      </span>
+      <span class="col-sm-3">
+        <input type="text" name="vehicleNo" [(ngModel)]="vehicleData.vehicleNo" class="form-control">
+      </span>
+      <span class="col-sm-3">
+        <label>Owner Name</label>
+      </span>
+      <span class="col-sm-3">
+        <input type="text" name="ownerName" [(ngModel)]="vehicleData.ownerName" class="form-control">
+      </span>
+    </div>
+    <div class="row form-group">
+      <span class="col-sm-3">
+        <label>Model</label>
+      </span>
+      <span class="col-sm-3">
+        <input type="text" name="model" [(ngModel)]="vehicleData.model" class="form-control">
+      </span>
+      <span class="col-sm-3">
+        <label>Model Number</label>
+      </span>
+      <span class="col-sm-3">
+        <input type="text" name="modelNo" [(ngModel)]="vehicleData.modelNo" class="form-control">
+      </span>
+    </div>
+    <div class="row form-group">
+      <span class="col-sm-3">
+        <label>Vehicle Type</label>
+      </span>
+      <span class="col-sm-3">
+        <input type="text" name="vehicleType" [(ngModel)]="vehicleData.vehicleType" class="form-control">
+      </span>
+      <span class="col-sm-3">
+        <label>Type Of Body</label>
+      </span>
+      <span class="col-sm-3">
+        <input type="text" name="typeOfBody" [(ngModel)]="vehicleData.typeOfBody" class="form-control">
+      </span>
+    </div>
+    <div class="row form-group">
+      <span class="col-sm-3">
+        <label>No Of Wheels</label>
+      </span>
+      <span class="col-sm-3">
+        <input type="text" name="noOfWheels" [(ngModel)]="vehicleData.noOfWheels" class="form-control">
+      </span>
+      <span class="col-sm-3">
+        <label>Vehicle Capacity</label>
+      </span>
+      <span class="col-sm-3">
+        <input type="text" name="vehicleCapacity" [(ngModel)]="vehicleData.vehicleCapacity" class="form-control">
+      </span>
+    </div>
+    <div class="row form-group">
+      <span class="col-sm-3">
+        <label>Engine Number</label>
+      </span>
+      <span class="col-sm-3">
+        <input type="text" name="engineNumber" [(ngModel)]="vehicleData.engineNumber" class="form-control">
+      </span>
+      <span class="col-sm-3">
+        <label>Chasis Number</label>
+      </span>
+      <span class="col-sm-3">
+        <input type="text" name="chasisNumber" [(ngModel)]="vehicleData.chasisNumber" class="form-control">
+      </span>
+    </div>
+    <div class="row form-group">
+      <span class="col-sm-3">
+        <label>Insurance Date</label>
+      </span>
+      <span class="col-sm-3">
+        <input type="text" #dp="bsDatepicker" bsDatepicker name="insuranceDate" [(ngModel)]="vehicleData.insuranceDate" class="form-control">
+      </span>
+      <span class="col-sm-3">
+        <label>FC Date</label>
+      </span>
+      <span class="col-sm-3">
+        <input type="text" #dp="bsDatepicker" bsDatepicker name="fcDate" [(ngModel)]="vehicleData.fcDate" class="form-control">
+      </span>
+    </div>
+    <div class="row form-group">
+      <span class="col-sm-3">
+        <label>NP Tax Date</label>
+      </span>
+      <span class="col-sm-3">
+        <input type="text" #dp="bsDatepicker" bsDatepicker name="npTaxDate" [(ngModel)]="vehicleData.npTaxDate" class="form-control">
+      </span>
+      <span class="col-sm-3">
+        <label>Permit Date</label>
+      </span>
+      <span class="col-sm-3">
+        <input type="text" #dp="bsDatepicker" bsDatepicker name="permitDate" [(ngModel)]="vehicleData.permitDate" class="form-control">
+      </span>
+    </div>
+    <div class="row form-group">
+      <span class="col-sm-3">
+        <button class="editbtn btn" (click)="updateVehicle(vehicleData)">Update</button>
+      </span>
+      <span class="col-sm-3">
+        <button class="cancelbtn btn" (click)="closeItem($event)">Cancel</button>
+      </span>
+    </div>
+  </form>
+</div>

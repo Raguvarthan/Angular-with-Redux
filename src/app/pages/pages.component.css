@@ -1,0 +1,10 @@
+.page-container{
+    margin: 0;
+    padding: 0;
+    width:100%;
+}
+
+.content-container{
+    min-height: 90vh;
+    padding-top:60px;
+}
