@@ -46,6 +46,7 @@ namespace JT_Transport.Logger
     /// <param name="methodName"></param>
     /// <param name="previousData"></param>
     /// <param name="currentData"></param>
+    /// <param name="collection"></param>
     public static void CreateLog(string username, string methodName, dynamic previousData,dynamic currentData,IMongoCollection<ActivityLoggerModel> collection)
     {
       ActivityLoggerModel logger =

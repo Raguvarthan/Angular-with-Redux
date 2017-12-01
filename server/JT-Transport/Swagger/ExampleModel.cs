@@ -111,6 +111,10 @@ namespace JT_Transport.Swagger
     /// Levels of access given to the role
     /// </summary>
     public string[] LevelOfAccess { get; set; }
+    /// <summary>
+    /// Defines if the roles is active or not
+    /// </summary>
+    public bool? IsActive { get; set; }
   }
 
   /// <summary>
@@ -134,6 +138,10 @@ namespace JT_Transport.Swagger
     /// Address of office
     /// </summary>
     public string Address { get; set; }
+    /// <summary>
+    /// Defines if the address is active or not
+    /// </summary>
+    public bool? IsActive { get; set; }
   }
 
 
