@@ -355,6 +355,7 @@ namespace JT_Transport.Controllers
     /// Make payment for trip
     /// </summary>
     /// <param name="tripId">Id of trip</param>
+    /// <param name="username">Username of user</param>
     /// <param name="data">details of payment</param>
     /// <returns></returns>
     /// <response code="200">Payment successfully made</response>
@@ -363,9 +364,9 @@ namespace JT_Transport.Controllers
     /// <response code="402">Paid amount is higher than the balance amount</response>
     /// <response code="404">Trip not found</response>
     /// <response code="400">Process ran into an exception</response>
-    [HttpPut("makepayment/{tripId}")]
+    [HttpPut("makepayment/{username}/{tripId}")]
     [SwaggerRequestExample(typeof(PaymentDetails), typeof(Example_UpdatePaymentInfo))]
-    public ActionResult MakePaymentForTrip([FromBody] PaymentDetails data, string tripId)
+    public ActionResult MakePaymentForTrip([FromBody] PaymentDetails data, string username, string tripId)
     {
       try
       {
@@ -402,6 +403,9 @@ namespace JT_Transport.Controllers
               var updatePaymentInfo = MH.UpdateSingleObject(tripinfo_collection, "TripId", tripId, null, null, Builders<BsonDocument>.Update.Set("PaymentInfo", paymentList));
               if (updateBalanceAmount != null && updatePaidAmount != null && updatePaymentInfo != null)
               {
+                var upadtedDetails = tripDetails;
+                upadtedDetails.PaymentInfo = paymentList;
+                AL.CreateLog(username, "MakePaymentForTrip", BsonSerializer.Deserialize<TripInfo>(getTrip), upadtedDetails, activitylog_collection);
                 return Ok(new ResponseData
                 {
                   Code = "200",

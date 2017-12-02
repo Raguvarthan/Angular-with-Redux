@@ -151,7 +151,7 @@ namespace JT_Transport.Swagger
     /// <summary></summary>
     public object GetExamples()
     {
-      return new PaymentDetails
+      return new 
       {
         AmountReceived = 1000,
         PaidTo = "Driver"

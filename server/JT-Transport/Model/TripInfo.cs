@@ -202,7 +202,7 @@ namespace JT_Transport.Model
     /// Contact name of office
     /// </summary>
     [Required]
-    public DateTime Date { get; set; }
+    public DateTime? Date { get; set; }
     /// <summary>
     /// Amount paid to
     /// </summary>
