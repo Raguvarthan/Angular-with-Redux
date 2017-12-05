@@ -395,21 +395,22 @@ namespace JT_Transport.Controllers
                 }
               }
               data.Date = DateTime.UtcNow;
-              paymentList.Add(data);
               var balanceAmount = tripDetails.BalanceAmount - data.AmountReceived;
+              data.RunningBalanceAmount = balanceAmount;
+              paymentList.Add(data);
               var updateBalanceAmount = MH.UpdateSingleObject(tripinfo_collection, "TripId", tripId, null, null, Builders<BsonDocument>.Update.Set("BalanceAmount", balanceAmount));
               var paidAmount = tripDetails.PaidAmount + data.AmountReceived;
               var updatePaidAmount = MH.UpdateSingleObject(tripinfo_collection, "TripId", tripId, null, null, Builders<BsonDocument>.Update.Set("PaidAmount", paidAmount));
               var updatePaymentInfo = MH.UpdateSingleObject(tripinfo_collection, "TripId", tripId, null, null, Builders<BsonDocument>.Update.Set("PaymentInfo", paymentList));
               if (updateBalanceAmount != null && updatePaidAmount != null && updatePaymentInfo != null)
               {
-                var upadtedDetails = tripDetails;
-                upadtedDetails.PaymentInfo = paymentList;
-                AL.CreateLog(username, "MakePaymentForTrip", BsonSerializer.Deserialize<TripInfo>(getTrip), upadtedDetails, activitylog_collection);
+                var updatedDetails = BsonSerializer.Deserialize<TripInfo>(MH.GetSingleObject(tripinfo_collection, "TripId", tripId, null, null).Result);
+                AL.CreateLog(username, "MakePaymentForTrip", BsonSerializer.Deserialize<TripInfo>(getTrip),updatedDetails , activitylog_collection);
                 return Ok(new ResponseData
                 {
                   Code = "200",
-                  Message = "Payment made successfully"
+                  Message = "Payment made successfully",
+                  Data = updatedDetails
                 });
               }
               else

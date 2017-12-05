@@ -301,27 +301,27 @@ namespace JT_Transport.Controllers
           if (data.OfficeName != null)
           {
             var updateDefinition = Builders<BsonDocument>.Update.Set("OfficeName", data.OfficeName);
-            var update = MH.UpdateSingleObject(officeinfo_collection, "OfficeId", officeId, null, null, updateDefinition);
+            update = MH.UpdateSingleObject(officeinfo_collection, "OfficeId", officeId, null, null, updateDefinition);
           }
           if (data.ContactName != null)
           {
             var updateDefinition = Builders<BsonDocument>.Update.Set("ContactName", data.ContactName);
-            var update = MH.UpdateSingleObject(officeinfo_collection, "OfficeId", officeId, null, null, updateDefinition);
+            update = MH.UpdateSingleObject(officeinfo_collection, "OfficeId", officeId, null, null, updateDefinition);
           }
           if (data.ContactNo != 0)
           {
             var updateDefinition = Builders<BsonDocument>.Update.Set("ContactNo", data.ContactNo);
-            var update = MH.UpdateSingleObject(officeinfo_collection, "OfficeId", officeId, null, null, updateDefinition);
+            update = MH.UpdateSingleObject(officeinfo_collection, "OfficeId", officeId, null, null, updateDefinition);
           }
           if (data.Address != null)
           {
             var updateDefinition = Builders<BsonDocument>.Update.Set("Address", data.Address);
-            var update = MH.UpdateSingleObject(officeinfo_collection, "OfficeId", officeId, null, null, updateDefinition);
+            update = MH.UpdateSingleObject(officeinfo_collection, "OfficeId", officeId, null, null, updateDefinition);
           }
           if (data.IsActive != null)
           {
             var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", data.IsActive);
-            var update = MH.UpdateSingleObject(officeinfo_collection, "OfficeId", officeId, null, null, updateDefinition);
+            update = MH.UpdateSingleObject(officeinfo_collection, "OfficeId", officeId, null, null, updateDefinition);
           }
           AL.CreateLog(username, "UpdateOfficeInfo", BsonSerializer.Deserialize<OfficeInfo>(getOffice), data, activitylog_collection);
           return Ok(new ResponseData

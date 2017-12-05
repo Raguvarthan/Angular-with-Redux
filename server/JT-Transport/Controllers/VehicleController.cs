@@ -274,77 +274,77 @@ namespace JT_Transport.Controllers
           if (data.VehicleNo != null)
           {
             var updateDefinition = Builders<BsonDocument>.Update.Set("VehicleNo", data.VehicleNo);
-            var update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
+            update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
           }
           if (data.OwnerName != null)
           {
             var updateDefinition = Builders<BsonDocument>.Update.Set("OwnerName", data.OwnerName);
-            var update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
+            update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
           }
           if (data.Model != null)
           {
             var updateDefinition = Builders<BsonDocument>.Update.Set("Model", data.Model);
-            var update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
+            update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
           }
           if (data.ModelNo != 0)
           {
             var updateDefinition = Builders<BsonDocument>.Update.Set("ModelNo", data.ModelNo);
-            var update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
+            update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
           }
           if (data.VehicleType != null)
           {
             var updateDefinition = Builders<BsonDocument>.Update.Set("VehicleType", data.VehicleType);
-            var update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
+            update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
           }
           if (data.TypeOfBody != null)
           {
             var updateDefinition = Builders<BsonDocument>.Update.Set("TypeOfBody", data.TypeOfBody);
-            var update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
+            update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
           }
           if (data.NoOfWheels != 0)
           {
             var updateDefinition = Builders<BsonDocument>.Update.Set("NoOfWheels", data.NoOfWheels);
-            var update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
+            update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
           }
           if (data.VehicleCapacity != null)
           {
             var updateDefinition = Builders<BsonDocument>.Update.Set("VehicleCapacity", data.VehicleCapacity);
-            var update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
+            update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
           }
           if (data.EngineNumber != null)
           {
             var updateDefinition = Builders<BsonDocument>.Update.Set("EngineNumber", data.EngineNumber);
-            var update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
+            update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
           }
           if (data.ChasisNumber != null)
           {
             var updateDefinition = Builders<BsonDocument>.Update.Set("ChasisNumber", data.ChasisNumber);
-            var update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
+            update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
           }
           if (data.InsuranceDate != null)
           {
             var updateDefinition = Builders<BsonDocument>.Update.Set("InsuranceDate", data.InsuranceDate);
-            var update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
+            update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
           }
           if (data.FCDate != null)
           {
             var updateDefinition = Builders<BsonDocument>.Update.Set("FCDate", data.FCDate);
-            var update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
+            update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
           }
           if (data.NPTaxDate != null)
           {
             var updateDefinition = Builders<BsonDocument>.Update.Set("NPTaxDate", data.NPTaxDate);
-            var update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
+            update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
           }
           if (data.PermitDate != null)
           {
             var updateDefinition = Builders<BsonDocument>.Update.Set("PermitDate", data.PermitDate);
-            var update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
+            update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
           }
           if (data.IsActive != null)
           {
             var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", data.IsActive);
-            var update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
+            update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
           }
           if (update != null)
           {

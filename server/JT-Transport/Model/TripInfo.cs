@@ -123,6 +123,16 @@ namespace JT_Transport.Model
     [Required]
     public int? UnloadTon { get; set; }
     /// <summary>
+    /// Advance balance amount
+    /// </summary>
+    [Required]
+    public long? AdvanceBalanceAmount { get; set; }
+    /// <summary>
+    /// Loading charges
+    /// </summary>
+    [Required]
+    public long? LoadingCharges { get; set; }
+    /// <summary>
     /// Unloading charges
     /// </summary>
     [Required]
@@ -197,7 +207,12 @@ namespace JT_Transport.Model
     /// Name of office
     /// </summary>
     [Required]
-    public long AmountReceived { get; set; }
+    public long? AmountReceived { get; set; }
+    /// <summary>
+    /// Balance amount 
+    /// </summary>
+    [Required]
+    public long? RunningBalanceAmount { get; set; }
     /// <summary>
     /// Contact name of office
     /// </summary>
