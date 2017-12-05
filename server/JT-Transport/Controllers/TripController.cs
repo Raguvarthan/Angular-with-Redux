@@ -112,6 +112,7 @@ namespace JT_Transport.Controllers
     /// </summary>
     /// <param name="tripId">Id of trip</param>
     /// <response code="200">Returns info of trip with given trip id</response>
+    /// <response code="401">Bad request</response>
     /// <response code="404">Trip not found</response>
     /// <response code="400">Process ran into an exception</response>
     /// <returns></returns>
@@ -121,23 +122,34 @@ namespace JT_Transport.Controllers
     {
       try
       {
-        var getTrip = MH.GetSingleObject(tripinfo_collection, "TripId", tripId, null, null).Result;
-        if (getTrip != null)
+        if (tripId != null)
         {
-          var tripInfo = BsonSerializer.Deserialize<TripInfo>(getTrip);
-          return Ok(new ResponseData
+          var getTrip = MH.GetSingleObject(tripinfo_collection, "TripId", tripId, null, null).Result;
+          if (getTrip != null)
           {
-            Code = "200",
-            Message = "Success",
-            Data = tripInfo
-          });
+            var tripInfo = BsonSerializer.Deserialize<TripInfo>(getTrip);
+            return Ok(new ResponseData
+            {
+              Code = "200",
+              Message = "Success",
+              Data = tripInfo
+            });
+          }
+          else
+          {
+            return BadRequest(new ResponseData
+            {
+              Code = "404",
+              Message = "Trip not found"
+            });
+          }
         }
         else
         {
           return BadRequest(new ResponseData
           {
-            Code = "404",
-            Message = "Trip not found"
+            Code = "401",
+            Message = "Bad Request"
           });
         }
       }
@@ -235,7 +247,7 @@ namespace JT_Transport.Controllers
     {
       try
       {
-        if (data != null)
+        if (data != null && username != null)
         {
           #region Calculate trip id
           var getTrips = MH.GetListOfObjects(tripinfo_collection, null, null, null, null).Result;
@@ -306,6 +318,7 @@ namespace JT_Transport.Controllers
     /// <param name="tripId">Id of trip</param>
     /// <returns></returns>
     /// <response code="200">Trip info updated successfully </response>
+    /// <response code="404">Bad Request</response>
     /// <response code="404">Trip not found</response>
     /// <response code="400">Process ran into an exception</response>
     [HttpPut("{username}/{tripId}")]
@@ -315,27 +328,38 @@ namespace JT_Transport.Controllers
     {
       try
       {
-        var getTrip = MH.GetSingleObject(tripinfo_collection, "TripId", tripId, null, null).Result;
-        if (getTrip != null)
+        if (data != null && username != null && tripId != null)
         {
-          var delete = MH.DeleteSingleObject(tripinfo_collection, "TripId", tripId, null, null);
-          var tripData = BsonSerializer.Deserialize<TripInfo>(getTrip);
-          data.Id = tripData.Id;
-          data.TripId = tripData.TripId;
-          await trip_db.GetCollection<TripInfo>("TripInfo").InsertOneAsync(data);
-          AL.CreateLog(username, "UpdateTripInfo", BsonSerializer.Deserialize<TripInfo>(getTrip), data, activitylog_collection);
-          return Ok(new ResponseData
+          var getTrip = MH.GetSingleObject(tripinfo_collection, "TripId", tripId, null, null).Result;
+          if (getTrip != null)
           {
-            Code = "200",
-            Message = "Updated"
-          });
+            var delete = MH.DeleteSingleObject(tripinfo_collection, "TripId", tripId, null, null);
+            var tripData = BsonSerializer.Deserialize<TripInfo>(getTrip);
+            data.Id = tripData.Id;
+            data.TripId = tripData.TripId;
+            await trip_db.GetCollection<TripInfo>("TripInfo").InsertOneAsync(data);
+            AL.CreateLog(username, "UpdateTripInfo", BsonSerializer.Deserialize<TripInfo>(getTrip), data, activitylog_collection);
+            return Ok(new ResponseData
+            {
+              Code = "200",
+              Message = "Updated"
+            });
+          }
+          else
+          {
+            return BadRequest(new ResponseData
+            {
+              Code = "404",
+              Message = "Trip info not found"
+            });
+          }
         }
         else
         {
           return BadRequest(new ResponseData
           {
-            Code = "404",
-            Message = "Trip info not found"
+            Code = "401",
+            Message = "Bad Request"
           });
         }
       }
@@ -370,65 +394,75 @@ namespace JT_Transport.Controllers
     {
       try
       {
-        var getTrip = MH.GetSingleObject(tripinfo_collection, "TripId", tripId, null, null).Result;
-        if (getTrip != null)
+        if (data != null && username != null && tripId != null)
         {
-          if (data.AmountReceived != 0)
+          var getTrip = MH.GetSingleObject(tripinfo_collection, "TripId", tripId, null, null).Result;
+          if (getTrip != null)
           {
-            var tripDetails = BsonSerializer.Deserialize<TripInfo>(getTrip);
-            if (data.AmountReceived > tripDetails.BalanceAmount)
+            if (data.AmountReceived != 0)
             {
-              return BadRequest(new ResponseData
+              var tripDetails = BsonSerializer.Deserialize<TripInfo>(getTrip);
+              if (data.AmountReceived > tripDetails.BalanceAmount)
               {
-                Code = "403",
-                Message = "Paid amount is higher than the balance amount"
-              });
-            }
-            else
-            {
-              List<PaymentDetails> paymentList = new List<PaymentDetails>();
-              if (tripDetails.PaymentInfo != null)
-              {
-                foreach (var payment in tripDetails.PaymentInfo)
+                return BadRequest(new ResponseData
                 {
-                  paymentList.Add(payment);
-                }
-              }
-              data.Date = DateTime.UtcNow;
-              var balanceAmount = tripDetails.BalanceAmount - data.AmountReceived;
-              data.RunningBalanceAmount = balanceAmount;
-              paymentList.Add(data);
-              var updateBalanceAmount = MH.UpdateSingleObject(tripinfo_collection, "TripId", tripId, null, null, Builders<BsonDocument>.Update.Set("BalanceAmount", balanceAmount));
-              var paidAmount = tripDetails.PaidAmount + data.AmountReceived;
-              var updatePaidAmount = MH.UpdateSingleObject(tripinfo_collection, "TripId", tripId, null, null, Builders<BsonDocument>.Update.Set("PaidAmount", paidAmount));
-              var updatePaymentInfo = MH.UpdateSingleObject(tripinfo_collection, "TripId", tripId, null, null, Builders<BsonDocument>.Update.Set("PaymentInfo", paymentList));
-              if (updateBalanceAmount != null && updatePaidAmount != null && updatePaymentInfo != null)
-              {
-                var updatedDetails = BsonSerializer.Deserialize<TripInfo>(MH.GetSingleObject(tripinfo_collection, "TripId", tripId, null, null).Result);
-                AL.CreateLog(username, "MakePaymentForTrip", BsonSerializer.Deserialize<TripInfo>(getTrip),updatedDetails , activitylog_collection);
-                return Ok(new ResponseData
-                {
-                  Code = "200",
-                  Message = "Payment made successfully",
-                  Data = updatedDetails
+                  Code = "403",
+                  Message = "Paid amount is higher than the balance amount"
                 });
               }
               else
               {
-                return BadRequest(new ResponseData
+                List<PaymentDetails> paymentList = new List<PaymentDetails>();
+                if (tripDetails.PaymentInfo != null)
                 {
-                  Code = "401",
-                  Message = "Payment update failed"
-                });
+                  foreach (var payment in tripDetails.PaymentInfo)
+                  {
+                    paymentList.Add(payment);
+                  }
+                }
+                var balanceAmount = tripDetails.BalanceAmount - data.AmountReceived;
+                data.RunningBalanceAmount = balanceAmount;
+                paymentList.Add(data);
+                var updateBalanceAmount = MH.UpdateSingleObject(tripinfo_collection, "TripId", tripId, null, null, Builders<BsonDocument>.Update.Set("BalanceAmount", balanceAmount));
+                var paidAmount = tripDetails.PaidAmount + data.AmountReceived;
+                var updatePaidAmount = MH.UpdateSingleObject(tripinfo_collection, "TripId", tripId, null, null, Builders<BsonDocument>.Update.Set("PaidAmount", paidAmount));
+                var updatePaymentInfo = MH.UpdateSingleObject(tripinfo_collection, "TripId", tripId, null, null, Builders<BsonDocument>.Update.Set("PaymentInfo", paymentList));
+                if (updateBalanceAmount != null && updatePaidAmount != null && updatePaymentInfo != null)
+                {
+                  var updatedDetails = BsonSerializer.Deserialize<TripInfo>(MH.GetSingleObject(tripinfo_collection, "TripId", tripId, null, null).Result);
+                  AL.CreateLog(username, "MakePaymentForTrip", BsonSerializer.Deserialize<TripInfo>(getTrip), updatedDetails, activitylog_collection);
+                  return Ok(new ResponseData
+                  {
+                    Code = "200",
+                    Message = "Payment made successfully",
+                    Data = updatedDetails
+                  });
+                }
+                else
+                {
+                  return BadRequest(new ResponseData
+                  {
+                    Code = "401",
+                    Message = "Payment update failed"
+                  });
+                }
               }
+            }
+            else
+            {
+              return BadRequest(new ResponseData
+              {
+                Code = "402",
+                Message = "Bad Request"
+              });
             }
           }
           else
           {
             return BadRequest(new ResponseData
             {
-              Code = "402",
-              Message = "Bad Request"
+              Code = "404",
+              Message = "Trip info not found"
             });
           }
         }
@@ -436,8 +470,8 @@ namespace JT_Transport.Controllers
         {
           return BadRequest(new ResponseData
           {
-            Code = "404",
-            Message = "Trip info not found"
+            Code = "402",
+            Message = "Bad request"
           });
         }
       }
@@ -460,6 +494,7 @@ namespace JT_Transport.Controllers
     /// <param name="tripId">Id of trip</param>
     /// <returns></returns>
     /// <response code="200">Trip info made inactive</response>
+    /// <response code="401">Bad request</response>
     /// <response code="404">Trip not found</response>
     /// <response code="400">Process ran into an exception</response>
     [HttpDelete("{username}/{tripId}")]
@@ -468,26 +503,37 @@ namespace JT_Transport.Controllers
     {
       try
       {
-        var getTrip = MH.GetSingleObject(tripinfo_collection, "TripId", tripId, null, null).Result;
-        if (getTrip != null)
+        if (tripId != null && username != null)
         {
-          var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", false);
-          var update = MH.UpdateSingleObject(tripinfo_collection, "TripId", tripId, null, null, updateDefinition);
-          var data = BsonSerializer.Deserialize<TripInfo>(getTrip);
-          data.IsActive = false;
-          AL.CreateLog(username, "MakeTripInfoInActive", BsonSerializer.Deserialize<TripInfo>(getTrip), data, activitylog_collection);
-          return Ok(new ResponseData
+          var getTrip = MH.GetSingleObject(tripinfo_collection, "TripId", tripId, null, null).Result;
+          if (getTrip != null)
           {
-            Code = "200",
-            Message = "Trip info made inactive"
-          });
+            var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", false);
+            var update = MH.UpdateSingleObject(tripinfo_collection, "TripId", tripId, null, null, updateDefinition);
+            var data = BsonSerializer.Deserialize<TripInfo>(getTrip);
+            data.IsActive = false;
+            AL.CreateLog(username, "MakeTripInfoInActive", BsonSerializer.Deserialize<TripInfo>(getTrip), data, activitylog_collection);
+            return Ok(new ResponseData
+            {
+              Code = "200",
+              Message = "Trip info made inactive"
+            });
+          }
+          else
+          {
+            return BadRequest(new ResponseData
+            {
+              Code = "404",
+              Message = "Trip info not found"
+            });
+          }
         }
         else
         {
           return BadRequest(new ResponseData
           {
-            Code = "404",
-            Message = "Trip info not found"
+            Code = "401",
+            Message = "Bad Request"
           });
         }
       }
@@ -510,6 +556,7 @@ namespace JT_Transport.Controllers
     /// <param name="tripId">Id of trip</param>
     /// <returns></returns>
     /// <response code="200">Trip info made active</response>
+    /// <response code="401">Bad request</response>
     /// <response code="404">Trip not found</response>
     /// <response code="400">Process ran into an exception</response>
     [HttpPut("makeactive/{username}/{tripId}")]
@@ -518,26 +565,37 @@ namespace JT_Transport.Controllers
     {
       try
       {
-        var getTrip = MH.GetSingleObject(tripinfo_collection, "TripId", tripId, null, null).Result;
-        if (getTrip != null)
+        if (username != null && tripId != null)
         {
-          var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", true);
-          var update = MH.UpdateSingleObject(tripinfo_collection, "TripId", tripId, null, null, updateDefinition);
-          var data = BsonSerializer.Deserialize<TripInfo>(getTrip);
-          data.IsActive = true;
-          AL.CreateLog(username, "MakeTripInfoActive", BsonSerializer.Deserialize<TripInfo>(getTrip), data, activitylog_collection);
-          return Ok(new ResponseData
+          var getTrip = MH.GetSingleObject(tripinfo_collection, "TripId", tripId, null, null).Result;
+          if (getTrip != null)
           {
-            Code = "200",
-            Message = "Trip info made active"
-          });
+            var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", true);
+            var update = MH.UpdateSingleObject(tripinfo_collection, "TripId", tripId, null, null, updateDefinition);
+            var data = BsonSerializer.Deserialize<TripInfo>(getTrip);
+            data.IsActive = true;
+            AL.CreateLog(username, "MakeTripInfoActive", BsonSerializer.Deserialize<TripInfo>(getTrip), data, activitylog_collection);
+            return Ok(new ResponseData
+            {
+              Code = "200",
+              Message = "Trip info made active"
+            });
+          }
+          else
+          {
+            return BadRequest(new ResponseData
+            {
+              Code = "404",
+              Message = "Trip info not found"
+            });
+          }
         }
         else
         {
           return BadRequest(new ResponseData
           {
-            Code = "404",
-            Message = "Trip info not found"
+            Code = "401",
+            Message = "Bad Request"
           });
         }
       }

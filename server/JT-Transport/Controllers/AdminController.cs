@@ -116,6 +116,7 @@ namespace JT_Transport.Controllers
     /// <returns></returns>
     /// <param name="rolename">Name of role</param>
     /// <response code="200">Returns details of role with given name</response>
+    /// <response code="401">Bad Request</response>
     /// <response code="404">Role not found</response>
     /// <response code="400">Process ran into an exception</response>
     [HttpGet("role/{rolename}")]
@@ -124,22 +125,33 @@ namespace JT_Transport.Controllers
     {
       try
       {
-        var getRole = MH.GetSingleObject(roles_collection, "RoleName", rolename, null, null).Result;
-        if (getRole != null)
+        if (rolename != null)
         {
-          return Ok(new ResponseData
+          var getRole = MH.GetSingleObject(roles_collection, "RoleName", rolename, null, null).Result;
+          if (getRole != null)
           {
-            Code = "200",
-            Message = "Success",
-            Data = BsonSerializer.Deserialize<Roles>(getRole)
-          });
+            return Ok(new ResponseData
+            {
+              Code = "200",
+              Message = "Success",
+              Data = BsonSerializer.Deserialize<Roles>(getRole)
+            });
+          }
+          else
+          {
+            return BadRequest(new ResponseData
+            {
+              Code = "404",
+              Message = "Role not found"
+            });
+          }
         }
         else
         {
           return BadRequest(new ResponseData
           {
-            Code = "404",
-            Message = "Role not found"
+            Code = "401",
+            Message = "Bad Request"
           });
         }
       }
@@ -165,6 +177,7 @@ namespace JT_Transport.Controllers
     /// <response code="401">Role with the same name is found</response>
     /// <response code="402">Role with the same name is found and its made active</response>
     /// <response code="403">Role with same id is already added</response>
+    /// <response code="405">Bad Request</response>
     /// <response code="400">Process ran into an exception</response>
     [HttpPost("role/insert/{username}")]
     [SwaggerRequestExample(typeof(Roles), typeof(Example_InsertRole))]
@@ -173,63 +186,74 @@ namespace JT_Transport.Controllers
     {
       try
       {
-        var getRole = MH.GetSingleObject(roles_collection, "RoleName", data.RoleName, null, null).Result;
-        if (getRole == null)
+        if (data != null && username != null)
         {
-          data.IsActive = true;
-          var insert = MH.InsertNewRole(data, rolesCollection);
-          if (insert == true)
+          var getRole = MH.GetSingleObject(roles_collection, "RoleName", data.RoleName, null, null).Result;
+          if (getRole == null)
           {
-            AL.CreateLog(username, "InsertRole", null, data, activitylog_collection);
-            return Ok(new ResponseData
+            data.IsActive = true;
+            var insert = MH.InsertNewRole(data, rolesCollection);
+            if (insert == true)
             {
-              Code = "200",
-              Message = "Inserted",
-              Data = data
-            });
-          }
-          else if (insert == false)
-          {
-            return BadRequest(new ResponseData
+              AL.CreateLog(username, "InsertRole", null, data, activitylog_collection);
+              return Ok(new ResponseData
+              {
+                Code = "200",
+                Message = "Inserted",
+                Data = data
+              });
+            }
+            else if (insert == false)
             {
-              Code = "403",
-              Message = "Role with same id is already added"
-            });
+              return BadRequest(new ResponseData
+              {
+                Code = "403",
+                Message = "Role with same id is already added"
+              });
+            }
+            else
+            {
+              return BadRequest(new ResponseData
+              {
+                Code = "400",
+                Message = "Failed",
+                Data = insert
+              });
+            }
           }
           else
           {
-            return BadRequest(new ResponseData
+            var roleDetails = BsonSerializer.Deserialize<Roles>(getRole);
+            if (roleDetails.IsActive == true)
             {
-              Code = "400",
-              Message = "Failed",
-              Data = insert
-            });
+              return BadRequest(new ResponseData
+              {
+                Code = "401",
+                Message = "Role with the same name is found"
+              });
+            }
+            else
+            {
+              var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", true);
+              update = MH.UpdateSingleObject(roles_collection, "RoleName", data.RoleName, null, null, updateDefinition);
+              var detail = roleDetails;
+              detail.IsActive = true;
+              AL.CreateLog(username, "InsertRole", roleDetails, detail, activitylog_collection);
+              return BadRequest(new ResponseData
+              {
+                Code = "402",
+                Message = "Role with the same name is found and is made active"
+              });
+            }
           }
         }
         else
         {
-          var roleDetails = BsonSerializer.Deserialize<Roles>(getRole);
-          if (roleDetails.IsActive == true)
+          return BadRequest(new ResponseData
           {
-            return BadRequest(new ResponseData
-            {
-              Code = "401",
-              Message = "Role with the same name is found"
-            });
-          }
-          else
-          {
-            var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", true);
-            update = MH.UpdateSingleObject(roles_collection, "RoleName", data.RoleName, null, null, updateDefinition);
-            var detail = roleDetails;
-            detail.IsActive = true;
-            AL.CreateLog(username, "InsertRole", roleDetails, detail, activitylog_collection);
-            return BadRequest(new ResponseData
-            {
-              Code = "402",
-              Message = "Role with the same name is found and is made active"
-            });
-          }
+            Code = "405",
+            Message = "Bad request"
+          });
         }
       }
       catch (Exception ex)
@@ -252,6 +276,7 @@ namespace JT_Transport.Controllers
     /// <param name="rolename">Name of role for whoes details needs to be updated</param>
     /// <returns></returns>
     /// <response code="200">Role updated successfully</response>
+    /// <response code="401">Bad Request</response>
     /// <response code="404">Role not found</response>
     /// <response code="400">Process ran into an exception</response>
     [HttpPut("role/{username}/{rolename}")]
@@ -261,32 +286,43 @@ namespace JT_Transport.Controllers
     {
       try
       {
-        var getRole = MH.GetSingleObject(roles_collection, "RoleName", rolename, null, null).Result;
-        if (getRole != null)
+        if (data != null && username != null && rolename != null)
         {
-          if (data.LevelOfAccess != null)
+          var getRole = MH.GetSingleObject(roles_collection, "RoleName", rolename, null, null).Result;
+          if (getRole != null)
           {
-            var updateDefinition = Builders<BsonDocument>.Update.Set("LevelOfAccess", data.LevelOfAccess);
-            var update = MH.UpdateSingleObject(roles_collection, "RoleName", rolename, null, null, updateDefinition);
+            if (data.LevelOfAccess != null)
+            {
+              var updateDefinition = Builders<BsonDocument>.Update.Set("LevelOfAccess", data.LevelOfAccess);
+              var update = MH.UpdateSingleObject(roles_collection, "RoleName", rolename, null, null, updateDefinition);
+            }
+            if (data.IsActive != null)
+            {
+              var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", data.IsActive);
+              var update = MH.UpdateSingleObject(roles_collection, "RoleName", rolename, null, null, updateDefinition);
+            }
+            AL.CreateLog(username, "UpdateRole", BsonSerializer.Deserialize<Roles>(getRole), data, activitylog_collection);
+            return Ok(new ResponseData
+            {
+              Code = "200",
+              Message = "Updated"
+            });
           }
-          if (data.IsActive != null)
+          else
           {
-            var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", data.IsActive);
-            var update = MH.UpdateSingleObject(roles_collection, "RoleName", rolename, null, null, updateDefinition);
+            return BadRequest(new ResponseData
+            {
+              Code = "404",
+              Message = "Role not found"
+            });
           }
-          AL.CreateLog(username, "UpdateRole", BsonSerializer.Deserialize<Roles>(getRole), data, activitylog_collection);
-          return Ok(new ResponseData
-          {
-            Code = "200",
-            Message = "Updated"
-          });
         }
         else
         {
           return BadRequest(new ResponseData
           {
-            Code = "404",
-            Message = "Role not found"
+            Code = "401",
+            Message = "Bad request"
           });
         }
       }
@@ -309,6 +345,7 @@ namespace JT_Transport.Controllers
     /// <param name="rolename">Name of role for whoes details needs to be updated</param>
     /// <returns></returns>
     /// <response code="200">Role updated successfully</response>
+    /// <response code="401">Bad Request</response>
     /// <response code="404">Role not found</response>
     /// <response code="400">Process ran into an exception</response>
     [HttpDelete("role/{username}/{rolename}")]
@@ -317,26 +354,37 @@ namespace JT_Transport.Controllers
     {
       try
       {
-        var getRole = MH.GetSingleObject(roles_collection, "RoleName", rolename, null, null).Result;
-        if (getRole != null)
+        if (username != null && rolename != null)
         {
-          var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", false);
-          update = MH.UpdateSingleObject(roles_collection, "RoleName", rolename, null, null, updateDefinition);
-          var data = BsonSerializer.Deserialize<Roles>(getRole);
-          data.IsActive = false;
-          AL.CreateLog(username, "MakeRoleInActive", BsonSerializer.Deserialize<Roles>(getRole), data, activitylog_collection);
-          return Ok(new ResponseData
+          var getRole = MH.GetSingleObject(roles_collection, "RoleName", rolename, null, null).Result;
+          if (getRole != null)
           {
-            Code = "200",
-            Message = "Role make inactive"
-          });
+            var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", false);
+            update = MH.UpdateSingleObject(roles_collection, "RoleName", rolename, null, null, updateDefinition);
+            var data = BsonSerializer.Deserialize<Roles>(getRole);
+            data.IsActive = false;
+            AL.CreateLog(username, "MakeRoleInActive", BsonSerializer.Deserialize<Roles>(getRole), data, activitylog_collection);
+            return Ok(new ResponseData
+            {
+              Code = "200",
+              Message = "Role make inactive"
+            });
+          }
+          else
+          {
+            return BadRequest(new ResponseData
+            {
+              Code = "404",
+              Message = "Role not found"
+            });
+          }
         }
         else
         {
           return BadRequest(new ResponseData
           {
-            Code = "404",
-            Message = "Role not found"
+            Code = "401",
+            Message = "Bad Request"
           });
         }
       }
@@ -352,7 +400,6 @@ namespace JT_Transport.Controllers
       }
     }
 
-
     /// <summary>
     /// Make a role active
     /// </summary>
@@ -360,6 +407,7 @@ namespace JT_Transport.Controllers
     /// <param name="rolename">Name of role for whoes details needs to be updated</param>
     /// <returns></returns>
     /// <response code="200">Role updated successfully</response>
+    /// <response code="401">Bad Request</response>
     /// <response code="404">Role not found</response>
     /// <response code="400">Process ran into an exception</response>
     [HttpPut("role/makeactive/{username}/{rolename}")]
@@ -368,26 +416,37 @@ namespace JT_Transport.Controllers
     {
       try
       {
-        var getRole = MH.GetSingleObject(roles_collection, "RoleName", rolename, null, null).Result;
-        if (getRole != null)
+        if (username != null && rolename != null)
         {
-          var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", true);
-          update = MH.UpdateSingleObject(roles_collection, "RoleName", rolename, null, null, updateDefinition);
-          var data = BsonSerializer.Deserialize<Roles>(getRole);
-          data.IsActive = true;
-          AL.CreateLog(username, "MakeRoleActive", BsonSerializer.Deserialize<Roles>(getRole), data, activitylog_collection);
-          return Ok(new ResponseData
+          var getRole = MH.GetSingleObject(roles_collection, "RoleName", rolename, null, null).Result;
+          if (getRole != null)
           {
-            Code = "200",
-            Message = "Role made active"
-          });
+            var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", true);
+            update = MH.UpdateSingleObject(roles_collection, "RoleName", rolename, null, null, updateDefinition);
+            var data = BsonSerializer.Deserialize<Roles>(getRole);
+            data.IsActive = true;
+            AL.CreateLog(username, "MakeRoleActive", BsonSerializer.Deserialize<Roles>(getRole), data, activitylog_collection);
+            return Ok(new ResponseData
+            {
+              Code = "200",
+              Message = "Role made active"
+            });
+          }
+          else
+          {
+            return BadRequest(new ResponseData
+            {
+              Code = "404",
+              Message = "Role not found"
+            });
+          }
         }
         else
         {
           return BadRequest(new ResponseData
           {
-            Code = "404",
-            Message = "Role not found"
+            Code = "401",
+            Message = "Bad Request"
           });
         }
       }

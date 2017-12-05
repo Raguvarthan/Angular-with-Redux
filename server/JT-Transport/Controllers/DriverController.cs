@@ -114,6 +114,7 @@ namespace JT_Transport.Controllers
     /// </summary>
     /// <param name="driverId">Id of driver</param>
     /// <response code="200">Returns info of driver with given driver id</response>
+    /// <response code="401">Bad Request</response>
     /// <response code="404">Drivers not found</response>
     /// <response code="400">Process ran into an exception</response>
     /// <returns></returns>
@@ -123,23 +124,34 @@ namespace JT_Transport.Controllers
     {
       try
       {
-        var getDriver = MH.GetSingleObject(driverinfo_collection, "DriverId", driverId, null, null).Result;
-        if (getDriver != null)
+        if (driverId != null)
         {
-          var driverInfo = BsonSerializer.Deserialize<DriverInfo>(getDriver);
-          return Ok(new ResponseData
+          var getDriver = MH.GetSingleObject(driverinfo_collection, "DriverId", driverId, null, null).Result;
+          if (getDriver != null)
           {
-            Code = "200",
-            Message = "Success",
-            Data = driverInfo
-          });
+            var driverInfo = BsonSerializer.Deserialize<DriverInfo>(getDriver);
+            return Ok(new ResponseData
+            {
+              Code = "200",
+              Message = "Success",
+              Data = driverInfo
+            });
+          }
+          else
+          {
+            return BadRequest(new ResponseData
+            {
+              Code = "404",
+              Message = "Driver not found"
+            });
+          }
         }
         else
         {
           return BadRequest(new ResponseData
           {
-            Code = "404",
-            Message = "Driver not found"
+            Code = "401",
+            Message = "Bad Request"
           });
         }
       }
@@ -173,7 +185,7 @@ namespace JT_Transport.Controllers
     {
       try
       {
-        if (data != null)
+        if (data != null && username != null)
         {
           var checkDriver = MH.GetSingleObject(driverinfo_collection, "DriverName", data.DriverName, "Address", data.Address).Result;
           if (checkDriver != null)
@@ -256,6 +268,7 @@ namespace JT_Transport.Controllers
     /// <param name="driverId">Id of driver</param>
     /// <returns></returns>
     /// <response code="200">Driver info updated successfully </response>
+    /// <response code="401">BadRequest</response>
     /// <response code="404">Driver not found</response>
     /// <response code="400">Process ran into an exception</response>
     [HttpPut("{username}/{driverId}")]
@@ -265,41 +278,52 @@ namespace JT_Transport.Controllers
     {
       try
       {
-        if (data.DriverName != null)
+        if (data != null && username != null && driverId != null)
         {
-          var updateDefinition = Builders<BsonDocument>.Update.Set("DriverName", data.DriverName);
-          update = MH.UpdateSingleObject(driverinfo_collection, "DriverId", driverId, null, null, updateDefinition);
-        }
-        if (data.ContactNo != 0)
-        {
-          var updateDefinition = Builders<BsonDocument>.Update.Set("ContactNo", data.ContactNo);
-          update = MH.UpdateSingleObject(driverinfo_collection, "DriverId", driverId, null, null, updateDefinition);
-        }
-        if (data.Address != null)
-        {
-          var updateDefinition = Builders<BsonDocument>.Update.Set("Address", data.Address);
-          update = MH.UpdateSingleObject(driverinfo_collection, "DriverId", driverId, null, null, updateDefinition);
-        }
-        if (data.IsActive != null)
-        {
-          var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", data.IsActive);
-          update = MH.UpdateSingleObject(driverinfo_collection, "DriverId", driverId, null, null, updateDefinition);
-        }
-        if (update != null)
-        {
-          AL.CreateLog(username, "UpdateDriverInfo", BsonSerializer.Deserialize<DriverInfo>(update), data, activitylog_collection);
-          return Ok(new ResponseData
+          if (data.DriverName != null)
           {
-            Code = "200",
-            Message = "Updated"
-          });
+            var updateDefinition = Builders<BsonDocument>.Update.Set("DriverName", data.DriverName);
+            update = MH.UpdateSingleObject(driverinfo_collection, "DriverId", driverId, null, null, updateDefinition);
+          }
+          if (data.ContactNo != 0)
+          {
+            var updateDefinition = Builders<BsonDocument>.Update.Set("ContactNo", data.ContactNo);
+            update = MH.UpdateSingleObject(driverinfo_collection, "DriverId", driverId, null, null, updateDefinition);
+          }
+          if (data.Address != null)
+          {
+            var updateDefinition = Builders<BsonDocument>.Update.Set("Address", data.Address);
+            update = MH.UpdateSingleObject(driverinfo_collection, "DriverId", driverId, null, null, updateDefinition);
+          }
+          if (data.IsActive != null)
+          {
+            var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", data.IsActive);
+            update = MH.UpdateSingleObject(driverinfo_collection, "DriverId", driverId, null, null, updateDefinition);
+          }
+          if (update != null)
+          {
+            AL.CreateLog(username, "UpdateDriverInfo", BsonSerializer.Deserialize<DriverInfo>(update), data, activitylog_collection);
+            return Ok(new ResponseData
+            {
+              Code = "200",
+              Message = "Updated"
+            });
+          }
+          else
+          {
+            return BadRequest(new ResponseData
+            {
+              Code = "404",
+              Message = "Driver info not found"
+            });
+          }
         }
         else
         {
           return BadRequest(new ResponseData
           {
-            Code = "404",
-            Message = "Driver info not found"
+            Code = "401",
+            Message = "Bad request"
           });
         }
       }
@@ -322,6 +346,7 @@ namespace JT_Transport.Controllers
     /// <param name="driverId">Id of driver</param>
     /// <returns></returns>
     /// <response code="200">Driver info made inactive</response>
+    /// <response code="401">Bad Request</response>
     /// <response code="404">Driver info not found</response>
     /// <response code="400">Process ran into an exception</response>
     [HttpDelete("{username}/{driverId}")]
@@ -330,26 +355,37 @@ namespace JT_Transport.Controllers
     {
       try
       {
-        var getDriver = MH.GetSingleObject(driverinfo_collection, "DriverId", driverId, null, null).Result;
-        if (getDriver != null)
+        if (username != null && driverId != null)
         {
-          var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", false);
-          update = MH.UpdateSingleObject(driverinfo_collection, "DriverId", driverId, null, null, updateDefinition);
-          var data = BsonSerializer.Deserialize<DriverInfo>(getDriver);
-          data.IsActive = false;
-          AL.CreateLog(username, "MakeDriverInfoInActive", BsonSerializer.Deserialize<DriverInfo>(getDriver), data, activitylog_collection);
-          return Ok(new ResponseData
+          var getDriver = MH.GetSingleObject(driverinfo_collection, "DriverId", driverId, null, null).Result;
+          if (getDriver != null)
           {
-            Code = "200",
-            Message = "Driver info made inactive"
-          });
+            var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", false);
+            update = MH.UpdateSingleObject(driverinfo_collection, "DriverId", driverId, null, null, updateDefinition);
+            var data = BsonSerializer.Deserialize<DriverInfo>(getDriver);
+            data.IsActive = false;
+            AL.CreateLog(username, "MakeDriverInfoInActive", BsonSerializer.Deserialize<DriverInfo>(getDriver), data, activitylog_collection);
+            return Ok(new ResponseData
+            {
+              Code = "200",
+              Message = "Driver info made inactive"
+            });
+          }
+          else
+          {
+            return BadRequest(new ResponseData
+            {
+              Code = "404",
+              Message = "Driver info not found"
+            });
+          }
         }
         else
         {
           return BadRequest(new ResponseData
           {
-            Code = "404",
-            Message = "Driver info not found"
+            Code = "401",
+            Message = "Bad Request"
           });
         }
       }
@@ -372,6 +408,7 @@ namespace JT_Transport.Controllers
     /// <param name="driverId">Id of Driver</param>
     /// <returns></returns>
     /// <response code="200">Driver info made active</response>
+    /// <response code="401">Bad Request</response>
     /// <response code="404">Driver info not found</response>
     /// <response code="400">Process ran into an exception</response>
     [HttpPut("makeactive/{username}/{driverId}")]
@@ -380,26 +417,37 @@ namespace JT_Transport.Controllers
     {
       try
       {
-        var getDriver = MH.GetSingleObject(driverinfo_collection, "DriverId", driverId, null, null).Result;
-        if (getDriver != null)
+        if (User != null && driverId != null)
         {
-          var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", true);
-          update = MH.UpdateSingleObject(driverinfo_collection, "DriverId", driverId, null, null, updateDefinition);
-          var data = BsonSerializer.Deserialize<DriverInfo>(getDriver);
-          data.IsActive = true;
-          AL.CreateLog(username, "MakeDriverInfoActive", BsonSerializer.Deserialize<DriverInfo>(getDriver), data, activitylog_collection);
-          return Ok(new ResponseData
+          var getDriver = MH.GetSingleObject(driverinfo_collection, "DriverId", driverId, null, null).Result;
+          if (getDriver != null)
           {
-            Code = "200",
-            Message = "Driver info made active"
-          });
+            var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", true);
+            update = MH.UpdateSingleObject(driverinfo_collection, "DriverId", driverId, null, null, updateDefinition);
+            var data = BsonSerializer.Deserialize<DriverInfo>(getDriver);
+            data.IsActive = true;
+            AL.CreateLog(username, "MakeDriverInfoActive", BsonSerializer.Deserialize<DriverInfo>(getDriver), data, activitylog_collection);
+            return Ok(new ResponseData
+            {
+              Code = "200",
+              Message = "Driver info made active"
+            });
+          }
+          else
+          {
+            return BadRequest(new ResponseData
+            {
+              Code = "404",
+              Message = "Driver info not found"
+            });
+          }
         }
         else
         {
           return BadRequest(new ResponseData
           {
-            Code = "404",
-            Message = "Driver info not found"
+            Code = "401",
+            Message = "Bad Request"
           });
         }
       }

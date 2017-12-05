@@ -117,6 +117,7 @@ namespace JT_Transport.Controllers
     /// </summary>
     /// <param name="officeId">Id of office</param>
     /// <response code="200">Returns info of office with given office id</response>
+    /// <response code="401">Bad Request</response>
     /// <response code="404">Offices not found</response>
     /// <response code="400">Process ran into an exception</response>
     /// <returns></returns>
@@ -126,23 +127,34 @@ namespace JT_Transport.Controllers
     {
       try
       {
-        var getOffice = MH.GetSingleObject(officeinfo_collection, "OfficeId", officeId, null, null).Result;
-        if (getOffice != null)
+        if (officeId != null)
         {
-          var officeInfo = BsonSerializer.Deserialize<OfficeInfo>(getOffice);
-          return Ok(new ResponseData
+          var getOffice = MH.GetSingleObject(officeinfo_collection, "OfficeId", officeId, null, null).Result;
+          if (getOffice != null)
           {
-            Code = "200",
-            Message = "Success",
-            Data = officeInfo
-          });
+            var officeInfo = BsonSerializer.Deserialize<OfficeInfo>(getOffice);
+            return Ok(new ResponseData
+            {
+              Code = "200",
+              Message = "Success",
+              Data = officeInfo
+            });
+          }
+          else
+          {
+            return BadRequest(new ResponseData
+            {
+              Code = "404",
+              Message = "Office not found"
+            });
+          }
         }
         else
         {
           return BadRequest(new ResponseData
           {
-            Code = "404",
-            Message = "Office not found"
+            Code = "401",
+            Message = "Bad Request"
           });
         }
       }
@@ -177,7 +189,7 @@ namespace JT_Transport.Controllers
     {
       try
       {
-        if (data != null)
+        if (data != null && username != null)
         {
           var checkOffice = MH.GetSingleObject(officeinfo_collection, "OfficeName", data.OfficeName, "Address", data.Address).Result;
           if (checkOffice != null)
@@ -238,7 +250,7 @@ namespace JT_Transport.Controllers
                 Data = data
               });
             }
-            else if(insert == false)
+            else if (insert == false)
             {
               return BadRequest(new ResponseData
               {
@@ -286,6 +298,7 @@ namespace JT_Transport.Controllers
     /// <param name="officeId">Id of office</param>
     /// <returns></returns>
     /// <response code="200">Office info updated successfully </response>
+    /// <response code="401">Bad Request</response>
     /// <response code="404">Office not found</response>
     /// <response code="400">Process ran into an exception</response>
     [HttpPut("{username}/{officeId}")]
@@ -295,47 +308,58 @@ namespace JT_Transport.Controllers
     {
       try
       {
-        var getOffice = MH.GetSingleObject(officeinfo_collection, "OfficeId", officeId, null, null).Result;
-        if (getOffice != null)
+        if (data != null && username != null && officeId != null)
         {
-          if (data.OfficeName != null)
+          var getOffice = MH.GetSingleObject(officeinfo_collection, "OfficeId", officeId, null, null).Result;
+          if (getOffice != null)
           {
-            var updateDefinition = Builders<BsonDocument>.Update.Set("OfficeName", data.OfficeName);
-            update = MH.UpdateSingleObject(officeinfo_collection, "OfficeId", officeId, null, null, updateDefinition);
+            if (data.OfficeName != null)
+            {
+              var updateDefinition = Builders<BsonDocument>.Update.Set("OfficeName", data.OfficeName);
+              update = MH.UpdateSingleObject(officeinfo_collection, "OfficeId", officeId, null, null, updateDefinition);
+            }
+            if (data.ContactName != null)
+            {
+              var updateDefinition = Builders<BsonDocument>.Update.Set("ContactName", data.ContactName);
+              update = MH.UpdateSingleObject(officeinfo_collection, "OfficeId", officeId, null, null, updateDefinition);
+            }
+            if (data.ContactNo != 0)
+            {
+              var updateDefinition = Builders<BsonDocument>.Update.Set("ContactNo", data.ContactNo);
+              update = MH.UpdateSingleObject(officeinfo_collection, "OfficeId", officeId, null, null, updateDefinition);
+            }
+            if (data.Address != null)
+            {
+              var updateDefinition = Builders<BsonDocument>.Update.Set("Address", data.Address);
+              update = MH.UpdateSingleObject(officeinfo_collection, "OfficeId", officeId, null, null, updateDefinition);
+            }
+            if (data.IsActive != null)
+            {
+              var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", data.IsActive);
+              update = MH.UpdateSingleObject(officeinfo_collection, "OfficeId", officeId, null, null, updateDefinition);
+            }
+            AL.CreateLog(username, "UpdateOfficeInfo", BsonSerializer.Deserialize<OfficeInfo>(getOffice), data, activitylog_collection);
+            return Ok(new ResponseData
+            {
+              Code = "200",
+              Message = "Updated"
+            });
           }
-          if (data.ContactName != null)
+          else
           {
-            var updateDefinition = Builders<BsonDocument>.Update.Set("ContactName", data.ContactName);
-            update = MH.UpdateSingleObject(officeinfo_collection, "OfficeId", officeId, null, null, updateDefinition);
+            return BadRequest(new ResponseData
+            {
+              Code = "404",
+              Message = "Office info not found"
+            });
           }
-          if (data.ContactNo != 0)
-          {
-            var updateDefinition = Builders<BsonDocument>.Update.Set("ContactNo", data.ContactNo);
-            update = MH.UpdateSingleObject(officeinfo_collection, "OfficeId", officeId, null, null, updateDefinition);
-          }
-          if (data.Address != null)
-          {
-            var updateDefinition = Builders<BsonDocument>.Update.Set("Address", data.Address);
-            update = MH.UpdateSingleObject(officeinfo_collection, "OfficeId", officeId, null, null, updateDefinition);
-          }
-          if (data.IsActive != null)
-          {
-            var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", data.IsActive);
-            update = MH.UpdateSingleObject(officeinfo_collection, "OfficeId", officeId, null, null, updateDefinition);
-          }
-          AL.CreateLog(username, "UpdateOfficeInfo", BsonSerializer.Deserialize<OfficeInfo>(getOffice), data, activitylog_collection);
-          return Ok(new ResponseData
-          {
-            Code = "200",
-            Message = "Updated"
-          });
         }
         else
         {
           return BadRequest(new ResponseData
           {
-            Code = "404",
-            Message = "Office info not found"
+            Code = "401",
+            Message = "Bad request"
           });
         }
       }
@@ -358,6 +382,7 @@ namespace JT_Transport.Controllers
     /// <param name="officeId">Id of office</param>
     /// <returns></returns>
     /// <response code="200">Office info made inactive</response>
+    /// <response code="401">Bad Request</response>
     /// <response code="404">Office not found</response>
     /// <response code="400">Process ran into an exception</response>
     [HttpDelete("{username}/{officeId}")]
@@ -366,26 +391,37 @@ namespace JT_Transport.Controllers
     {
       try
       {
-        var getOffice = MH.GetSingleObject(officeinfo_collection, "OfficeId", officeId, null, null).Result;
-        if (getOffice != null)
+        if (username != null && officeId != null)
         {
-          var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", false);
-          update = MH.UpdateSingleObject(officeinfo_collection, "OfficeId", officeId, null, null, updateDefinition);
-          var data = BsonSerializer.Deserialize<OfficeInfo>(getOffice);
-          data.IsActive = false;
-          AL.CreateLog(username, "MakeUserInfoInActive", BsonSerializer.Deserialize<OfficeInfo>(getOffice), data, activitylog_collection);
-          return Ok(new ResponseData
+          var getOffice = MH.GetSingleObject(officeinfo_collection, "OfficeId", officeId, null, null).Result;
+          if (getOffice != null)
           {
-            Code = "200",
-            Message = "UserInfo made inactive"
-          });
+            var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", false);
+            update = MH.UpdateSingleObject(officeinfo_collection, "OfficeId", officeId, null, null, updateDefinition);
+            var data = BsonSerializer.Deserialize<OfficeInfo>(getOffice);
+            data.IsActive = false;
+            AL.CreateLog(username, "MakeUserInfoInActive", BsonSerializer.Deserialize<OfficeInfo>(getOffice), data, activitylog_collection);
+            return Ok(new ResponseData
+            {
+              Code = "200",
+              Message = "UserInfo made inactive"
+            });
+          }
+          else
+          {
+            return BadRequest(new ResponseData
+            {
+              Code = "404",
+              Message = "Office info not found"
+            });
+          }
         }
         else
         {
           return BadRequest(new ResponseData
           {
-            Code = "404",
-            Message = "Office info not found"
+            Code = "401",
+            Message = "Bad Request"
           });
         }
       }
@@ -408,6 +444,7 @@ namespace JT_Transport.Controllers
     /// <param name="officeId">Id of office</param>
     /// <returns></returns>
     /// <response code="200">Office info made active </response>
+    /// <response code="401">Bad Request</response>
     /// <response code="404">Office not found</response>
     /// <response code="400">Process ran into an exception</response>
     [HttpPut("makeactive/{username}/{officeId}")]
@@ -416,26 +453,37 @@ namespace JT_Transport.Controllers
     {
       try
       {
-        var getOffice = MH.GetSingleObject(officeinfo_collection, "OfficeId", officeId, null, null).Result;
-        if (getOffice != null)
+        if (username != null && officeId != null)
         {
-          var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", true);
-          update = MH.UpdateSingleObject(officeinfo_collection, "OfficeId", officeId, null, null, updateDefinition);
-          var data = BsonSerializer.Deserialize<OfficeInfo>(getOffice);
-          data.IsActive = true;
-          AL.CreateLog(username, "DeleteOfficeInfo", BsonSerializer.Deserialize<OfficeInfo>(getOffice), data, activitylog_collection);
-          return Ok(new ResponseData
+          var getOffice = MH.GetSingleObject(officeinfo_collection, "OfficeId", officeId, null, null).Result;
+          if (getOffice != null)
           {
-            Code = "200",
-            Message = "UserInfo made active"
-          });
+            var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", true);
+            update = MH.UpdateSingleObject(officeinfo_collection, "OfficeId", officeId, null, null, updateDefinition);
+            var data = BsonSerializer.Deserialize<OfficeInfo>(getOffice);
+            data.IsActive = true;
+            AL.CreateLog(username, "DeleteOfficeInfo", BsonSerializer.Deserialize<OfficeInfo>(getOffice), data, activitylog_collection);
+            return Ok(new ResponseData
+            {
+              Code = "200",
+              Message = "UserInfo made active"
+            });
+          }
+          else
+          {
+            return BadRequest(new ResponseData
+            {
+              Code = "404",
+              Message = "Office info not found"
+            });
+          }
         }
         else
         {
           return BadRequest(new ResponseData
           {
-            Code = "404",
-            Message = "Office info not found"
+            Code = "401",
+            Message = "Bad Request"
           });
         }
       }

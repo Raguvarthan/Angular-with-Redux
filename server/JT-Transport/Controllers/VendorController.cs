@@ -117,6 +117,7 @@ namespace JT_Transport.Controllers
     /// </summary>
     /// <param name="vendorId">Id of vendor</param>
     /// <response code="200">Returns info of vendor with given vendor id</response>
+    /// <response code="401">Bad Request</response>
     /// <response code="404">Vendors not found</response>
     /// <response code="400">Process ran into an exception</response>
     /// <returns></returns>
@@ -126,23 +127,34 @@ namespace JT_Transport.Controllers
     {
       try
       {
-        var getVendor = MH.GetSingleObject(vendorinfo_collection, "VendorId", vendorId, null, null).Result;
-        if (getVendor != null)
+        if (vendorId != null)
         {
-          var vendorInfo = BsonSerializer.Deserialize<VendorInfo>(getVendor);
-          return Ok(new ResponseData
+          var getVendor = MH.GetSingleObject(vendorinfo_collection, "VendorId", vendorId, null, null).Result;
+          if (getVendor != null)
           {
-            Code = "200",
-            Message = "Success",
-            Data = vendorInfo
-          });
+            var vendorInfo = BsonSerializer.Deserialize<VendorInfo>(getVendor);
+            return Ok(new ResponseData
+            {
+              Code = "200",
+              Message = "Success",
+              Data = vendorInfo
+            });
+          }
+          else
+          {
+            return BadRequest(new ResponseData
+            {
+              Code = "404",
+              Message = "Vendor not found"
+            });
+          }
         }
         else
         {
           return BadRequest(new ResponseData
           {
-            Code = "404",
-            Message = "Vendor not found"
+            Code = "401",
+            Message = "Bad Request"
           });
         }
       }
@@ -176,7 +188,7 @@ namespace JT_Transport.Controllers
     {
       try
       {
-        if (data != null)
+        if (data != null && username != null)
         {
           var checkVendor = MH.GetSingleObject(vendorinfo_collection, "VendorName", data.VendorName, "Address", data.Address).Result;
           if (checkVendor != null)
@@ -260,6 +272,7 @@ namespace JT_Transport.Controllers
     /// <returns></returns>
     /// <response code="200">Vendor info updated successfully </response>
     /// <response code="401">Update failed</response>
+    /// <response code="402">Bad Request</response>
     /// <response code="404">Vendor not found</response>
     /// <response code="400">Process ran into an exception</response>
     [HttpPut("{username}/{vendorId}")]
@@ -269,49 +282,60 @@ namespace JT_Transport.Controllers
     {
       try
       {
-        var getVendor = MH.GetSingleObject(vendorinfo_collection, "VendorId", vendorId, null, null).Result;
-        if (getVendor != null)
+        if (data != null && username != null && vendorId != null)
         {
-          if (data.VendorName != null)
+          var getVendor = MH.GetSingleObject(vendorinfo_collection, "VendorId", vendorId, null, null).Result;
+          if (getVendor != null)
           {
-            var updateDefinition = Builders<BsonDocument>.Update.Set("VendorName", data.VendorName);
-            update = MH.UpdateSingleObject(vendorinfo_collection, "VendorId", vendorId, null, null, updateDefinition);
-          }
-          if (data.ContactName != null)
-          {
-            var updateDefinition = Builders<BsonDocument>.Update.Set("ContactName", data.ContactName);
-            update = MH.UpdateSingleObject(vendorinfo_collection, "VendorId", vendorId, null, null, updateDefinition);
-          }
-          if (data.ContactNo != 0)
-          {
-            var updateDefinition = Builders<BsonDocument>.Update.Set("ContactNo", data.ContactNo);
-            update = MH.UpdateSingleObject(vendorinfo_collection, "VendorId", vendorId, null, null, updateDefinition);
-          }
-          if (data.Address != null)
-          {
-            var updateDefinition = Builders<BsonDocument>.Update.Set("Address", data.Address);
-            update = MH.UpdateSingleObject(vendorinfo_collection, "VendorId", vendorId, null, null, updateDefinition);
-          }
-          if (data.IsActive != null)
-          {
-            var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", data.IsActive);
-            update = MH.UpdateSingleObject(vendorinfo_collection, "VendorId", vendorId, null, null, updateDefinition);
-          }
-          if (update != null)
-          {
-            AL.CreateLog(username, "UpdateVendorInfo", BsonSerializer.Deserialize<VendorInfo>(update), data, activitylog_collection);
-            return Ok(new ResponseData
+            if (data.VendorName != null)
             {
-              Code = "200",
-              Message = "Updated"
-            });
+              var updateDefinition = Builders<BsonDocument>.Update.Set("VendorName", data.VendorName);
+              update = MH.UpdateSingleObject(vendorinfo_collection, "VendorId", vendorId, null, null, updateDefinition);
+            }
+            if (data.ContactName != null)
+            {
+              var updateDefinition = Builders<BsonDocument>.Update.Set("ContactName", data.ContactName);
+              update = MH.UpdateSingleObject(vendorinfo_collection, "VendorId", vendorId, null, null, updateDefinition);
+            }
+            if (data.ContactNo != 0)
+            {
+              var updateDefinition = Builders<BsonDocument>.Update.Set("ContactNo", data.ContactNo);
+              update = MH.UpdateSingleObject(vendorinfo_collection, "VendorId", vendorId, null, null, updateDefinition);
+            }
+            if (data.Address != null)
+            {
+              var updateDefinition = Builders<BsonDocument>.Update.Set("Address", data.Address);
+              update = MH.UpdateSingleObject(vendorinfo_collection, "VendorId", vendorId, null, null, updateDefinition);
+            }
+            if (data.IsActive != null)
+            {
+              var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", data.IsActive);
+              update = MH.UpdateSingleObject(vendorinfo_collection, "VendorId", vendorId, null, null, updateDefinition);
+            }
+            if (update != null)
+            {
+              AL.CreateLog(username, "UpdateVendorInfo", BsonSerializer.Deserialize<VendorInfo>(update), data, activitylog_collection);
+              return Ok(new ResponseData
+              {
+                Code = "200",
+                Message = "Updated"
+              });
+            }
+            else
+            {
+              return BadRequest(new ResponseData
+              {
+                Code = "401",
+                Message = "Update failed"
+              });
+            }
           }
           else
           {
             return BadRequest(new ResponseData
             {
-              Code = "401",
-              Message = "Update failed"
+              Code = "404",
+              Message = "Vendor info not found"
             });
           }
         }
@@ -319,8 +343,8 @@ namespace JT_Transport.Controllers
         {
           return BadRequest(new ResponseData
           {
-            Code = "404",
-            Message = "Vendor info not found"
+            Code = "402",
+            Message = "Bad Request"
           });
         }
       }
@@ -343,6 +367,7 @@ namespace JT_Transport.Controllers
     /// <param name="vendorId">Id of vendor</param>
     /// <returns></returns>
     /// <response code="200">Vendor info made inactive</response>
+    /// <response code="401">Bad Request</response>
     /// <response code="404">Vendor info not found</response>
     /// <response code="400">Process ran into an exception</response>
     [HttpDelete("{username}/{vendorId}")]
@@ -351,26 +376,37 @@ namespace JT_Transport.Controllers
     {
       try
       {
-        var getVendor = MH.GetSingleObject(vendorinfo_collection, "VendorId", vendorId, null, null).Result;
-        if (getVendor != null)
+        if (username != null && vendorId != null)
         {
-          var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", false);
-          update = MH.UpdateSingleObject(vendorinfo_collection, "VendorId", vendorId, null, null, updateDefinition);
-          var data = BsonSerializer.Deserialize<VendorInfo>(getVendor);
-          data.IsActive = false;
-          AL.CreateLog(username, "MakeVendorInfoInActive", BsonSerializer.Deserialize<VendorInfo>(getVendor), data, activitylog_collection);
-          return Ok(new ResponseData
+          var getVendor = MH.GetSingleObject(vendorinfo_collection, "VendorId", vendorId, null, null).Result;
+          if (getVendor != null)
           {
-            Code = "200",
-            Message = "Vendor info made inactive"
-          });
+            var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", false);
+            update = MH.UpdateSingleObject(vendorinfo_collection, "VendorId", vendorId, null, null, updateDefinition);
+            var data = BsonSerializer.Deserialize<VendorInfo>(getVendor);
+            data.IsActive = false;
+            AL.CreateLog(username, "MakeVendorInfoInActive", BsonSerializer.Deserialize<VendorInfo>(getVendor), data, activitylog_collection);
+            return Ok(new ResponseData
+            {
+              Code = "200",
+              Message = "Vendor info made inactive"
+            });
+          }
+          else
+          {
+            return BadRequest(new ResponseData
+            {
+              Code = "404",
+              Message = "Vendor info not found"
+            });
+          }
         }
         else
         {
           return BadRequest(new ResponseData
           {
-            Code = "404",
-            Message = "Vendor info not found"
+            Code = "401",
+            Message = "Bad Request"
           });
         }
       }
@@ -393,6 +429,7 @@ namespace JT_Transport.Controllers
     /// <param name="vendorId">Id of vendor</param>
     /// <returns></returns>
     /// <response code="200">Vendor info made active</response>
+    /// <response code="401">Bad Request</response>
     /// <response code="404">Vendor info not found</response>
     /// <response code="400">Process ran into an exception</response>
     [HttpPut("makeactive/{username}/{vendorId}")]
@@ -401,26 +438,37 @@ namespace JT_Transport.Controllers
     {
       try
       {
-        var getVendor = MH.GetSingleObject(vendorinfo_collection, "VendorId", vendorId, null, null).Result;
-        if (getVendor != null)
+        if (vendorId != null && username != null)
         {
-          var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", true);
-          update = MH.UpdateSingleObject(vendorinfo_collection, "VendorId", vendorId, null, null, updateDefinition);
-          var data = BsonSerializer.Deserialize<VendorInfo>(getVendor);
-          data.IsActive = true;
-          AL.CreateLog(username, "MakeVendorInfoActive", BsonSerializer.Deserialize<VendorInfo>(getVendor), data, activitylog_collection);
-          return Ok(new ResponseData
+          var getVendor = MH.GetSingleObject(vendorinfo_collection, "VendorId", vendorId, null, null).Result;
+          if (getVendor != null)
           {
-            Code = "200",
-            Message = "Vendor info made active"
-          });
+            var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", true);
+            update = MH.UpdateSingleObject(vendorinfo_collection, "VendorId", vendorId, null, null, updateDefinition);
+            var data = BsonSerializer.Deserialize<VendorInfo>(getVendor);
+            data.IsActive = true;
+            AL.CreateLog(username, "MakeVendorInfoActive", BsonSerializer.Deserialize<VendorInfo>(getVendor), data, activitylog_collection);
+            return Ok(new ResponseData
+            {
+              Code = "200",
+              Message = "Vendor info made active"
+            });
+          }
+          else
+          {
+            return BadRequest(new ResponseData
+            {
+              Code = "404",
+              Message = "Vendor info not found"
+            });
+          }
         }
         else
         {
           return BadRequest(new ResponseData
           {
-            Code = "404",
-            Message = "Vendor info not found"
+            Code = "401",
+            Message = "Bad Request"
           });
         }
       }
