@@ -1,6 +1,8 @@
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using JT_Transport.Model;
 
 namespace JT_Transport.Swagger
 {
@@ -144,7 +146,6 @@ namespace JT_Transport.Swagger
     public bool? IsActive { get; set; }
   }
 
-
   /// <summary>
   /// Info of driver
   /// </summary>
@@ -166,5 +167,67 @@ namespace JT_Transport.Swagger
     /// Defines if the driver is active or not
     /// </summary>
     public bool? IsActive { get; set; }
+  }
+
+  /// <summary>
+  /// Info of tyre
+  /// </summary>
+  public class ExampleModel_TyreInfo
+  {
+    /// <summary>
+    /// Status of type
+    /// </summary>
+    public string TyreStatus { get; set; }
+    /// <summary>
+    /// Purchase deatails of tyre
+    /// </summary>
+    public ExampleModel_PurchaseDetails PurchaseDetails { get; set; }
+    /// <summary>
+    /// Disposal details of tyre
+    /// </summary>
+    public DisposalDetails DisposalDetails { get; set; }
+    /// <summary>
+    /// Total KM runned
+    /// </summary>
+    public long? TotalKMRunned { get; set; }
+    /// <summary>
+    /// Flag to define if tyre is active or not
+    /// </summary>
+    public bool? IsActive { get; set; }
+  }
+
+  /// <summary>
+  /// Purchase details of tyre
+  /// </summary>
+  public class ExampleModel_PurchaseDetails
+  {
+    /// <summary>
+    /// Brand name
+    /// </summary>
+    public string BrandName { get; set; }
+    /// <summary>
+    /// Price of tyre
+    /// </summary>
+    public long? PriceOfTyre { get; set; }
+    /// <summary>
+    /// Model of tire
+    /// </summary>
+    public string TyreModel { get; set; }
+    /// <summary>
+    /// Tire number
+    /// </summary>
+    public string TyreNo { get; set; }
+    /// <summary>
+    /// Name of vendor
+    /// </summary>
+    public string VendorName { get; set; }
+    /// <summary>
+    /// Date of purchase
+    /// </summary>
+    public DateTime? PurchaseDate { get; set; }
+    /// <summary>
+    /// Bill Number
+    /// </summary>
+    public string BillNo { get; set; }
   }
 }

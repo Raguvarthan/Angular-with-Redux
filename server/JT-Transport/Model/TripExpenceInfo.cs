@@ -43,42 +43,42 @@ namespace JT_Transport.Model
     /// 
     /// </summary>
     [Required]
-    public DateTime EntryDate { get; set; }
+    public DateTime? EntryDate { get; set; }
     /// <summary>
     /// 
     /// </summary>
     [Required]
-    public DateTime StartDate { get; set; }
+    public DateTime? StartDate { get; set; }
     /// <summary>
     /// 
     /// </summary>
     [Required]
-    public DateTime EndDate { get; set; }
+    public DateTime? EndDate { get; set; }
     /// <summary>
     /// 
     /// </summary>
     [Required]
-    public long StartKM { get; set; }
+    public long? StartKM { get; set; }
     /// <summary>
     /// 
     /// </summary>
     [Required]
-    public long EndKM { get; set; }
+    public long? EndKM { get; set; }
     /// <summary>
     /// 
     /// </summary>
     [Required]
-    public long TotalKM { get; set; }
+    public long? TotalKM { get; set; }
     /// <summary>
     /// 
     /// </summary>
     [Required]
-    public long AdvanceAmount { get; set; }
+    public long? AdvanceAmount { get; set; }
     /// <summary>
     /// 
     /// </summary>
     [Required]
-    public int AverageMileage { get; set; }
+    public int? AverageMileage { get; set; }
     /// <summary>
     /// 
     /// </summary>
@@ -100,23 +100,24 @@ namespace JT_Transport.Model
     /// 
     /// </summary>
     [Required]
-    public long TotalIncome { get; set; }
+    public long? TotalIncome { get; set; }
     /// <summary>
     /// 
     /// </summary>
     [Required]
-    public long TotalExpenses { get; set; }
+    public long? TotalExpenses { get; set; }
     /// <summary>
     /// 
     /// </summary>
     [Required]
-    public long BalanceAmount { get; set; }
+    public long? NetProfit { get; set; }
     /// <summary>
     /// 
     /// </summary>
     [Required]
     public ExpenseInfo ExpenseInfo { get; set; }
   }
+
   /// <summary>
   /// 
   /// </summary>
@@ -146,22 +147,22 @@ namespace JT_Transport.Model
     /// 
     /// </summary>
     [Required]
-    public long TollExpenses { get; set; }
+    public long? TollExpenses { get; set; }
     /// <summary>
     /// 
     /// </summary>
     [Required]
-    public long DriverBata { get; set; }
+    public long? DriverBata { get; set; }
     /// <summary>
     /// 
     /// </summary>
     [Required]
-    public long CleanerBata { get; set; }
+    public int? DriverBataPercentage { get; set; }
     /// <summary>
     /// 
     /// </summary>
     [Required]
-    public long DriverBonus { get; set; }
+    public long? DriverBonus { get; set; }
     /// <summary>
     /// 
     /// </summary>
@@ -183,12 +184,12 @@ namespace JT_Transport.Model
     /// 
     /// </summary>
     [Required]
-    public long TotalQuantity { get; set; }
+    public long? TotalQuantity { get; set; }
     /// <summary>
     /// 
     /// </summary>
     [Required]
-    public long TotalAmount { get; set; }
+    public long? TotalAmount { get; set; }
     /// <summary>
     /// 
     /// </summary>
@@ -210,12 +211,12 @@ namespace JT_Transport.Model
     /// 
     /// </summary>
     [Required]
-    public long TotalQuantity { get; set; }
+    public long? TotalQuantity { get; set; }
     /// <summary>
     /// 
     /// </summary>
     [Required]
-    public long TotalAmount { get; set; }
+    public long? TotalAmount { get; set; }
     /// <summary>
     /// 
     /// </summary>
@@ -232,17 +233,17 @@ namespace JT_Transport.Model
     /// 
     /// </summary>
     [Required]
-    public DateTime Date { get; set; }
+    public DateTime? Date { get; set; }
     /// <summary>
     /// 
     /// </summary>
     [Required]
-    public long Quantity { get; set; }
+    public long? Quantity { get; set; }
     /// <summary>
     /// 
     /// </summary>
     [Required]
-    public long Amount { get; set; }
+    public long? Amount { get; set; }
   }
 
   /// <summary>
@@ -254,27 +255,27 @@ namespace JT_Transport.Model
     /// 
     /// </summary>
     [Required]
-    public int TotalLoadInTon { get; set; }
+    public int? TotalLoadInTon { get; set; }
     /// <summary>
     /// 
     /// </summary>
     [Required]
-    public long TotalVehicleAmount { get; set; }
+    public long? TotalVehicleAmount { get; set; }
     /// <summary>
     /// 
     /// </summary>
     [Required]
-    public long TotalCommission { get; set; }
+    public long? TotalCommission { get; set; }
     /// <summary>
     /// 
     /// </summary>
     [Required]
-    public long TotalLoadingCharges { get; set; }
+    public long? TotalLoadingCharges { get; set; }
     /// <summary>
     /// 
     /// </summary>
     [Required]
-    public long TotalUnloadingCharges { get; set; }
+    public long? TotalUnloadingCharges { get; set; }
     /// <summary>
     /// 
     /// </summary>
@@ -291,7 +292,7 @@ namespace JT_Transport.Model
     /// 
     /// </summary>
     [Required]
-    public DateTime TripStartDate { get; set; }
+    public DateTime? TripStartDate { get; set; }
     /// <summary>
     /// 
     /// </summary>
@@ -306,27 +307,32 @@ namespace JT_Transport.Model
     /// 
     /// </summary>
     [Required]
-    public int LoadInTon { get; set; }
+    public int? LoadInTon { get; set; }
     /// <summary>
     /// 
     /// </summary>
     [Required]
-    public long VehicleAmount { get; set; }
+    public long? VehicleAmount { get; set; }
     /// <summary>
     /// 
     /// </summary>
     [Required]
-    public long Commission { get; set; }
+    public long? Commission { get; set; }
     /// <summary>
     /// 
     /// </summary>
     [Required]
-    public long LoadingCharges { get; set; }
+    public int? CommissionPercentage { get; set; }
     /// <summary>
     /// 
     /// </summary>
     [Required]
-    public long UnloadingCharges { get; set; }
+    public long? LoadingCharges { get; set; }
+    /// <summary>
+    /// 
+    /// </summary>
+    [Required]
+    public long? UnloadingCharges { get; set; }
   }
 
   /// <summary>
@@ -338,7 +344,7 @@ namespace JT_Transport.Model
     /// 
     /// </summary>
     [Required]
-    public long TotalExpenses { get; set; }
+    public long? TotalExpenses { get; set; }
     /// <summary>
     /// 
     /// </summary>
@@ -360,7 +366,27 @@ namespace JT_Transport.Model
     /// 
     /// </summary>
     [Required]
-    public long Amount { get; set; }
+    public long? TotalAmount { get; set; }
+    /// <summary>
+    /// 
+    /// </summary>
+    [Required]
+    public long? Amount1 { get; set; }
+    /// <summary>
+    /// 
+    /// </summary>
+    [Required]
+    public long? Amount2 { get; set; }
+    /// <summary>
+    /// 
+    /// </summary>
+    [Required]
+    public long? Amount3 { get; set; }
+    /// <summary>
+    /// 
+    /// </summary>
+    [Required]
+    public long? Amount4 { get; set; }
   }
 
   /// <summary>
@@ -372,7 +398,7 @@ namespace JT_Transport.Model
     /// 
     /// </summary>
     [Required]
-    public long TotalBillableExpenses { get; set; }
+    public long? TotalBillableExpenses { get; set; }
     /// <summary>
     /// 
     /// </summary>
@@ -389,7 +415,7 @@ namespace JT_Transport.Model
     /// 
     /// </summary>
     [Required]
-    public long TotalOtherExpenses { get; set; }
+    public long? TotalOtherExpenses { get; set; }
     /// <summary>
     /// 
     /// </summary>
@@ -411,6 +437,6 @@ namespace JT_Transport.Model
     /// 
     /// </summary>
     [Required]
-    public long Amount { get; set; }
+    public long? Amount { get; set; }
   }
 }

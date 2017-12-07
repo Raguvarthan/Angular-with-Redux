@@ -151,7 +151,7 @@ namespace JT_Transport.Swagger
     /// <summary></summary>
     public object GetExamples()
     {
-      return new 
+      return new
       {
         AmountReceived = 1000,
         PaidTo = "Driver"
@@ -325,7 +325,7 @@ namespace JT_Transport.Swagger
         {
           TotalExpenses = 175695,
           TotalIncome = 333300,
-          BalanceAmount = 157605,
+          NetProfit = 20000,
           ExpenseInfo = new ExpenseInfo
           {
             DieselExpenses = new DieselExpenses
@@ -366,8 +366,8 @@ namespace JT_Transport.Swagger
               TotalExpenses = 9200,
               ExpenseDetails = new List<RTOAndPCExpenseDetails>
               {
-                new RTOAndPCExpenseDetails{Place = "FirstLocation",Amount = 4000},
-                new RTOAndPCExpenseDetails{Place = "ThirdLocation",Amount = 5200 }
+                new RTOAndPCExpenseDetails{Place = "FirstLocation",TotalAmount = 4000,Amount1=1200,Amount2=400,Amount3=2000,Amount4=400},
+                new RTOAndPCExpenseDetails{Place = "ThirdLocation",TotalAmount = 5200 ,Amount1=1500,Amount2=500,Amount3=2000,Amount4=600}
               }
             },
             PCExpenses = new RTOAndPCExpenses
@@ -375,12 +375,12 @@ namespace JT_Transport.Swagger
               TotalExpenses = 1720,
               ExpenseDetails = new List<RTOAndPCExpenseDetails>
               {
-                new RTOAndPCExpenseDetails{Place = "SecondLocation",Amount = 1720 }
+                new RTOAndPCExpenseDetails{Place = "SecondLocation",TotalAmount = 1720,Amount1=900,Amount2=200,Amount3=2000,Amount4=420 }
               }
             },
             TollExpenses = 33159,
             DriverBata = 30000,
-            CleanerBata = 6663,
+            DriverBataPercentage = 11,
             BillableExpenses = new BillableExpenses
             {
               TotalBillableExpenses = 710,
@@ -452,5 +452,108 @@ namespace JT_Transport.Swagger
 
   #endregion
 
+  #region Tyre Controller
 
+  /// <summary>
+  /// 
+  /// </summary>
+  public class Example_InsertTyreInfo : IExamplesProvider
+  {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public object GetExamples()
+    {
+      return new TyreInfo
+      {
+        TyreStatus = "In vehicle",
+        TotalKMRunned = 10000,
+        PurchaseDetails = new PurchaseDetails
+        {
+          BillNo = "JJS873512873873",
+          PriceOfTyre = 30000,
+          BrandName = "Apollo tyres",
+          PurchaseDate = DateTime.UtcNow.AddDays(-50),
+          TyreModel = "MMD",
+          TyreNo = "98128712461427",
+          VendorName = "JJ Traders"
+        }
+      };
+    }
+  }
+
+  /// <summary>
+  /// 
+  /// </summary>
+  public class Example_UpdateVehicleInfoForTyreInfo : IExamplesProvider
+  {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public object GetExamples()
+    {
+      return new
+      {
+        VehicleNumber = "TN-38-BY-6282",
+        FromDate = DateTime.UtcNow.AddDays(-50),
+        ToDate = DateTime.UtcNow.AddDays(-25),
+        StartKM = 100000,
+        EndKM = 150000,
+        PositionOfTyre = "Rear",
+        ReasonForRemoving = "Assigning to another vehicle",
+        TotalKM = 50000
+      };
+    }
+  }
+
+  /// <summary>
+  /// 
+  /// </summary>
+  public class Example_UpdateVehicleInfoForRethreadingInfo : IExamplesProvider
+  {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public object GetExamples()
+    {
+      return new
+      {
+        VendorName = "Jai auto works",
+        GivenDate = DateTime.UtcNow.AddDays(-5),
+        ReceiptNo = "812639128369812",
+        RethreadingCost = 6000,
+        TakenDate = DateTime.UtcNow.AddDays(-1),
+        VoucherNo = "JJ92371297",
+        AmountPaidDate = DateTime.UtcNow
+      };
+    }
+  }
+
+
+  /// <summary>
+  /// 
+  /// </summary>
+  public class Example_UpdateTyreInfo : IExamplesProvider
+  {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public object GetExamples()
+    {
+      return new ExampleModel_TyreInfo
+      {
+        DisposalDetails = new DisposalDetails
+        {
+          DisposalDate = DateTime.UtcNow,
+          VendorName = "Raja enterprice",
+          SoldPrice = 500
+        }
+      };
+    }
+    #endregion
+  }
 }

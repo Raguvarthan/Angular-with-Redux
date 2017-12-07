@@ -413,6 +413,36 @@ namespace JT_Transport.Helper
     /// <param name="data"></param>
     /// <param name="collection"></param>
     /// <returns></returns>
+    public static dynamic InsertNewTyreInfo(TyreInfo data, IMongoCollection<TyreInfo> collection)
+    {
+      try
+      {
+        #region Create index
+        //collection.Indexes.CreateOne("{ TyreId: " + data.TyreId + " }");
+        #endregion
+        collection.InsertOne(data);
+        return true;
+      }
+      catch (Exception ex)
+      {
+        if (ex.Message.Contains("duplicate key error"))
+        {
+          return ex.Message;
+        }
+        else
+        {
+          SL.CreateLog("MongoHelper", "InsertNewTyreInfo", ex.Message);
+          return false;
+        }
+      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="data"></param>
+    /// <param name="collection"></param>
+    /// <returns></returns>
     public static dynamic InsertNewDriverInfo(DriverInfo data, IMongoCollection<DriverInfo> collection)
     {
       try
