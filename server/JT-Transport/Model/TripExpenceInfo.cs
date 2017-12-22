@@ -255,7 +255,7 @@ namespace JT_Transport.Model
     /// 
     /// </summary>
     [Required]
-    public int? TotalLoadInTon { get; set; }
+    public double? TotalLoadInTon { get; set; }
     /// <summary>
     /// 
     /// </summary>
@@ -307,7 +307,7 @@ namespace JT_Transport.Model
     /// 
     /// </summary>
     [Required]
-    public int? LoadInTon { get; set; }
+    public double? LoadInTon { get; set; }
     /// <summary>
     /// 
     /// </summary>

@@ -82,7 +82,6 @@ namespace JT_Transport.Controllers
     /// <response code="909">Can not add token to database</response>
     /// <response code="404">User not found</response>
     /// <response code="400">Process ran into an exception</response>
-    [Authorize("Level3Access")]
     [HttpPost("login")]
     [SwaggerRequestExample(typeof(LoginModel), typeof(Example_LoginModel))]
     [ProducesResponseType(typeof(ResponseData), 200)]

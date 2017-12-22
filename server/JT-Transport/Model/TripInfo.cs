@@ -67,7 +67,7 @@ namespace JT_Transport.Model
     /// Number of tons for which the payment is to be maid
     /// </summary>
     [Required]
-    public int? NoOfTons { get; set; }
+    public double? NoOfTons { get; set; }
     /// <summary>
     /// Rate oer ton
     /// </summary>
@@ -121,7 +121,7 @@ namespace JT_Transport.Model
     /// Unload ton
     /// </summary>
     [Required]
-    public int? UnloadTon { get; set; }
+    public double? UnloadTon { get; set; }
     /// <summary>
     /// Advance balance amount
     /// </summary>

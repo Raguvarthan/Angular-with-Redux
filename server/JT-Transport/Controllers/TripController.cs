@@ -241,7 +241,7 @@ namespace JT_Transport.Controllers
     /// <response code="402">Bad request</response>
     /// <response code="400">Process ran into an exception</response>
     /// <returns></returns>
-    [Authorize("Level1Access")]
+    //[Authorize("Level1Access")]
     [HttpPost("{username}")]
     [SwaggerRequestExample(typeof(TripInfo), typeof(Example_InsertTripInfo))]
     [ProducesResponseType(typeof(ResponseData), 200)]
