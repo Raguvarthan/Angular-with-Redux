@@ -161,7 +161,6 @@ namespace JT_Transport.Controllers
     /// <response code="401">User already registered</response>
     /// <response code="402">User already registered and is made active</response>
     /// <response code="400">Process ran into an exception</response>
-    [Authorize("Level1Access")]
     [HttpPost("register")]
     [SwaggerRequestExample(typeof(RegisterModel), typeof(Example_RegisterModel))]
     [ProducesResponseType(typeof(ResponseData), 200)]
