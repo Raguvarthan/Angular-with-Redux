@@ -13,6 +13,7 @@ using MongoDB.Bson;
 using Swashbuckle.AspNetCore.Examples;
 using JT_Transport.Swagger;
 using JT_Transport.Logger;
+using Microsoft.AspNetCore.Authorization;
 
 namespace JT_Transport.Controllers
 {
@@ -179,6 +180,7 @@ namespace JT_Transport.Controllers
     /// <response code="403">Role with same id is already added</response>
     /// <response code="405">Bad Request</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level1Access")]
     [HttpPost("role/insert/{username}")]
     [SwaggerRequestExample(typeof(Roles), typeof(Example_InsertRole))]
     [ProducesResponseType(typeof(ResponseData), 200)]
@@ -279,6 +281,7 @@ namespace JT_Transport.Controllers
     /// <response code="401">Bad Request</response>
     /// <response code="404">Role not found</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level1Access")]
     [HttpPut("role/{username}/{rolename}")]
     [SwaggerRequestExample(typeof(ExampleModel_Roles), typeof(Example_UpdateRole))]
     [ProducesResponseType(typeof(ResponseData), 200)]
@@ -348,6 +351,7 @@ namespace JT_Transport.Controllers
     /// <response code="401">Bad Request</response>
     /// <response code="404">Role not found</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level1Access")]
     [HttpDelete("role/{username}/{rolename}")]
     [ProducesResponseType(typeof(ResponseData), 200)]
     public ActionResult MakeRoleInActive(string username, string rolename)
@@ -410,6 +414,7 @@ namespace JT_Transport.Controllers
     /// <response code="401">Bad Request</response>
     /// <response code="404">Role not found</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level1Access")]
     [HttpPut("role/makeactive/{username}/{rolename}")]
     [ProducesResponseType(typeof(ResponseData), 200)]
     public ActionResult MakeRoleActive(string username, string rolename)

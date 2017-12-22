@@ -14,6 +14,7 @@ using Swashbuckle.AspNetCore.Examples;
 using JT_Transport.Swagger;
 using MongoDB.Bson;
 using JT_Transport.Logger;
+using Microsoft.AspNetCore.Authorization;
 
 namespace JT_Transport.Controllers
 {
@@ -240,6 +241,7 @@ namespace JT_Transport.Controllers
     /// <response code="402">Bad request</response>
     /// <response code="400">Process ran into an exception</response>
     /// <returns></returns>
+    [Authorize("Level1Access")]
     [HttpPost("{username}")]
     [SwaggerRequestExample(typeof(TripInfo), typeof(Example_InsertTripInfo))]
     [ProducesResponseType(typeof(ResponseData), 200)]
@@ -321,6 +323,7 @@ namespace JT_Transport.Controllers
     /// <response code="404">Bad Request</response>
     /// <response code="404">Trip not found</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level1Access")]
     [HttpPut("{username}/{tripId}")]
     [SwaggerRequestExample(typeof(TripInfo), typeof(Example_InsertTripInfo))]
     [ProducesResponseType(typeof(ResponseData), 200)]
@@ -388,6 +391,7 @@ namespace JT_Transport.Controllers
     /// <response code="402">Paid amount is higher than the balance amount</response>
     /// <response code="404">Trip not found</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level1Access")]
     [HttpPut("makepayment/{username}/{tripId}")]
     [SwaggerRequestExample(typeof(PaymentDetails), typeof(Example_UpdatePaymentInfo))]
     public ActionResult MakePaymentForTrip([FromBody] PaymentDetails data, string username, string tripId)
@@ -497,6 +501,7 @@ namespace JT_Transport.Controllers
     /// <response code="401">Bad request</response>
     /// <response code="404">Trip not found</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level1Access")]
     [HttpDelete("{username}/{tripId}")]
     [ProducesResponseType(typeof(ResponseData), 200)]
     public ActionResult MakeTripInfoInActive(string username, string tripId)
@@ -559,6 +564,7 @@ namespace JT_Transport.Controllers
     /// <response code="401">Bad request</response>
     /// <response code="404">Trip not found</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level1Access")]
     [HttpPut("makeactive/{username}/{tripId}")]
     [ProducesResponseType(typeof(ResponseData), 200)]
     public ActionResult MakeTripInfoActive(string username, string tripId)

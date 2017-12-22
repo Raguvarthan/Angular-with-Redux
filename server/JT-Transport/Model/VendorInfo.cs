@@ -30,7 +30,7 @@ namespace JT_Transport.Model
     /// Contact number of vendor
     /// </summary>
     [Required]
-    public long ContactNo { get; set; }
+    public string ContactNo { get; set; }
     /// <summary>
     /// Address of vendor
     /// </summary>

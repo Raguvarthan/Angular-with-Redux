@@ -181,6 +181,7 @@ namespace JT_Transport.Controllers
     /// <response code="403">Bad Request</response>
     /// <response code="400">Process ran into an exception</response>
     /// <returns></returns>
+    [Authorize("Level1Access")]
     [HttpPost("{username}")]
     [SwaggerRequestExample(typeof(VendorInfo), typeof(Example_InsertVendorInfo))]
     [ProducesResponseType(typeof(ResponseData), 200)]
@@ -275,6 +276,7 @@ namespace JT_Transport.Controllers
     /// <response code="402">Bad Request</response>
     /// <response code="404">Vendor not found</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level1Access")]
     [HttpPut("{username}/{vendorId}")]
     [SwaggerRequestExample(typeof(ExampleModel_VendorInfo), typeof(Example_UpdateVendorInfo))]
     [ProducesResponseType(typeof(ResponseData), 200)]
@@ -297,7 +299,7 @@ namespace JT_Transport.Controllers
               var updateDefinition = Builders<BsonDocument>.Update.Set("ContactName", data.ContactName);
               update = MH.UpdateSingleObject(vendorinfo_collection, "VendorId", vendorId, null, null, updateDefinition);
             }
-            if (data.ContactNo != 0)
+            if (data.ContactNo != null)
             {
               var updateDefinition = Builders<BsonDocument>.Update.Set("ContactNo", data.ContactNo);
               update = MH.UpdateSingleObject(vendorinfo_collection, "VendorId", vendorId, null, null, updateDefinition);
@@ -370,6 +372,7 @@ namespace JT_Transport.Controllers
     /// <response code="401">Bad Request</response>
     /// <response code="404">Vendor info not found</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level1Access")]
     [HttpDelete("{username}/{vendorId}")]
     [ProducesResponseType(typeof(ResponseData), 200)]
     public ActionResult MakeVendorInfoInActive(string username, string vendorId)
@@ -432,6 +435,7 @@ namespace JT_Transport.Controllers
     /// <response code="401">Bad Request</response>
     /// <response code="404">Vendor info not found</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level1Access")]
     [HttpPut("makeactive/{username}/{vendorId}")]
     [ProducesResponseType(typeof(ResponseData), 200)]
     public ActionResult MakeVendorInfoActive(string username, string vendorId)

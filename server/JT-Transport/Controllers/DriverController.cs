@@ -12,6 +12,7 @@ using Swashbuckle.AspNetCore.Examples;
 using MH = JT_Transport.Helper.MongoHelper;
 using SL = JT_Transport.Logger.ServerSideLogger;
 using AL = JT_Transport.Logger.ActivityLogger;
+using Microsoft.AspNetCore.Authorization;
 
 namespace JT_Transport.Controllers
 {
@@ -178,6 +179,7 @@ namespace JT_Transport.Controllers
     /// <response code="403">Bad Request</response>
     /// <response code="400">Process ran into an exception</response>
     /// <returns></returns>
+    [Authorize("Level1Access")]
     [HttpPost("{username}")]
     [SwaggerRequestExample(typeof(DriverInfo), typeof(Example_InsertDriverInfo))]
     [ProducesResponseType(typeof(ResponseData), 200)]
@@ -271,6 +273,7 @@ namespace JT_Transport.Controllers
     /// <response code="401">BadRequest</response>
     /// <response code="404">Driver not found</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level1Access")]
     [HttpPut("{username}/{driverId}")]
     [SwaggerRequestExample(typeof(ExampleModel_DriverInfo), typeof(Example_UpdateDriverInfo))]
     [ProducesResponseType(typeof(ResponseData), 200)]
@@ -285,7 +288,7 @@ namespace JT_Transport.Controllers
             var updateDefinition = Builders<BsonDocument>.Update.Set("DriverName", data.DriverName);
             update = MH.UpdateSingleObject(driverinfo_collection, "DriverId", driverId, null, null, updateDefinition);
           }
-          if (data.ContactNo != 0)
+          if (data.ContactNo != null)
           {
             var updateDefinition = Builders<BsonDocument>.Update.Set("ContactNo", data.ContactNo);
             update = MH.UpdateSingleObject(driverinfo_collection, "DriverId", driverId, null, null, updateDefinition);
@@ -349,6 +352,7 @@ namespace JT_Transport.Controllers
     /// <response code="401">Bad Request</response>
     /// <response code="404">Driver info not found</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level1Access")]
     [HttpDelete("{username}/{driverId}")]
     [ProducesResponseType(typeof(ResponseData), 200)]
     public ActionResult MakeDriverInfoInActive(string username, string driverId)
@@ -411,6 +415,7 @@ namespace JT_Transport.Controllers
     /// <response code="401">Bad Request</response>
     /// <response code="404">Driver info not found</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level1Access")]
     [HttpPut("makeactive/{username}/{driverId}")]
     [ProducesResponseType(typeof(ResponseData), 200)]
     public ActionResult MakeDriverInfoActive(string username, string driverId)

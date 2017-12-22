@@ -26,7 +26,7 @@ namespace JT_Transport.Swagger
     /// <summary>
     /// Contact number of vendor
     /// </summary>
-    public long ContactNo { get; set; }
+    public string ContactNo { get; set; }
     /// <summary>
     /// Address of vendor
     /// </summary>
@@ -135,7 +135,7 @@ namespace JT_Transport.Swagger
     /// <summary>
     /// Contact number of office
     /// </summary>
-    public long ContactNo { get; set; }
+    public string ContactNo { get; set; }
     /// <summary>
     /// Address of office
     /// </summary>
@@ -158,7 +158,7 @@ namespace JT_Transport.Swagger
     /// <summary>
     /// Contact number
     /// </summary>
-    public long ContactNo { get; set; }
+    public string ContactNo { get; set; }
     /// <summary>
     /// Address of driver
     /// </summary>

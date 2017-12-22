@@ -182,6 +182,7 @@ namespace JT_Transport.Controllers
     /// <response code="405">Bad Request</response>
     /// <response code="400">Process ran into an exception</response>
     /// <returns></returns>
+    [Authorize("Level1Access")]
     [HttpPost("{username}")]
     [SwaggerRequestExample(typeof(OfficeInfo), typeof(Example_InsertOfficeInfo))]
     [ProducesResponseType(typeof(ResponseData), 200)]
@@ -301,6 +302,7 @@ namespace JT_Transport.Controllers
     /// <response code="401">Bad Request</response>
     /// <response code="404">Office not found</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level1Access")]
     [HttpPut("{username}/{officeId}")]
     [SwaggerRequestExample(typeof(ExampleModel_OfficeInfo), typeof(Example_UpdateOfficeInfo))]
     [ProducesResponseType(typeof(ResponseData), 200)]
@@ -323,7 +325,7 @@ namespace JT_Transport.Controllers
               var updateDefinition = Builders<BsonDocument>.Update.Set("ContactName", data.ContactName);
               update = MH.UpdateSingleObject(officeinfo_collection, "OfficeId", officeId, null, null, updateDefinition);
             }
-            if (data.ContactNo != 0)
+            if (data.ContactNo != null)
             {
               var updateDefinition = Builders<BsonDocument>.Update.Set("ContactNo", data.ContactNo);
               update = MH.UpdateSingleObject(officeinfo_collection, "OfficeId", officeId, null, null, updateDefinition);
@@ -385,6 +387,7 @@ namespace JT_Transport.Controllers
     /// <response code="401">Bad Request</response>
     /// <response code="404">Office not found</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level1Access")]
     [HttpDelete("{username}/{officeId}")]
     [ProducesResponseType(typeof(ResponseData), 200)]
     public ActionResult MakeUserInfoInActive(string username, string officeId)
@@ -447,6 +450,7 @@ namespace JT_Transport.Controllers
     /// <response code="401">Bad Request</response>
     /// <response code="404">Office not found</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level1Access")]
     [HttpPut("makeactive/{username}/{officeId}")]
     [ProducesResponseType(typeof(ResponseData), 200)]
     public ActionResult DeleteOfficeInfo(string username, string officeId)

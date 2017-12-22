@@ -12,6 +12,7 @@ using Swashbuckle.AspNetCore.Examples;
 using MH = JT_Transport.Helper.MongoHelper;
 using SL = JT_Transport.Logger.ServerSideLogger;
 using AL = JT_Transport.Logger.ActivityLogger;
+using Microsoft.AspNetCore.Authorization;
 
 namespace JT_Transport.Controllers
 {
@@ -182,6 +183,7 @@ namespace JT_Transport.Controllers
     /// <response code="403">Bad Request</response>
     /// <response code="400">Process ran into an exception</response>
     /// <returns></returns>
+    [Authorize("Level1Access")]
     [HttpPost("{username}")]
     [SwaggerRequestExample(typeof(TyreInfo), typeof(Example_InsertTyreInfo))]
     [ProducesResponseType(typeof(ResponseData), 200)]
@@ -284,6 +286,7 @@ namespace JT_Transport.Controllers
     /// <response code="402">Update failed</response>
     /// <response code="404">Tyre not found</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level1Access")]
     [HttpPut("{username}/{tyreId}")]
     [SwaggerRequestExample(typeof(ExampleModel_TyreInfo), typeof(Example_UpdateTyreInfo))]
     [ProducesResponseType(typeof(ResponseData), 200)]
@@ -427,6 +430,7 @@ namespace JT_Transport.Controllers
     /// <response code="402">Update failed</response>
     /// <response code="404">Tyre not found</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level1Access")]
     [HttpPut("vehicledetails/{username}/{tyreId}")]
     [SwaggerRequestExample(typeof(VehicleDetails), typeof(Example_UpdateVehicleInfoForTyreInfo))]
     [ProducesResponseType(typeof(ResponseData), 200)]
@@ -519,6 +523,7 @@ namespace JT_Transport.Controllers
     /// <response code="402">Update failed</response>
     /// <response code="404">Tyre not found</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level1Access")]
     [HttpPut("rethreadingdetails/{username}/{tyreId}")]
     [SwaggerRequestExample(typeof(RethreadingDetails), typeof(Example_UpdateVehicleInfoForRethreadingInfo))]
     [ProducesResponseType(typeof(ResponseData), 200)]
@@ -609,6 +614,7 @@ namespace JT_Transport.Controllers
     /// <response code="401">Bad Request</response>
     /// <response code="404">Tyre info not found</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level1Access")]
     [HttpDelete("{username}/{tyreId}")]
     [ProducesResponseType(typeof(ResponseData), 200)]
     public ActionResult MakeTyreInfoInActive(string username, string tyreId)
@@ -671,6 +677,7 @@ namespace JT_Transport.Controllers
     /// <response code="401">Bad Request</response>
     /// <response code="404">Tyre info not found</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level1Access")]
     [HttpPut("makeactive/{username}/{tyreId}")]
     [ProducesResponseType(typeof(ResponseData), 200)]
     public ActionResult MakeTyreInfoActive(string username, string tyreId)

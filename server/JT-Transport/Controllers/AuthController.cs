@@ -17,6 +17,7 @@ using Microsoft.Extensions.Options;
 using JT_Transport.Model.Repositories;
 using JT_Transport.Model.JWT;
 using JT_Transport.Logger;
+using Microsoft.AspNetCore.Authorization;
 
 namespace JT_Transport.Controllers
 {
@@ -81,6 +82,7 @@ namespace JT_Transport.Controllers
     /// <response code="909">Can not add token to database</response>
     /// <response code="404">User not found</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level3Access")]
     [HttpPost("login")]
     [SwaggerRequestExample(typeof(LoginModel), typeof(Example_LoginModel))]
     [ProducesResponseType(typeof(ResponseData), 200)]
@@ -160,6 +162,7 @@ namespace JT_Transport.Controllers
     /// <response code="401">User already registered</response>
     /// <response code="402">User already registered and is made active</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level1Access")]
     [HttpPost("register")]
     [SwaggerRequestExample(typeof(RegisterModel), typeof(Example_RegisterModel))]
     [ProducesResponseType(typeof(ResponseData), 200)]
@@ -230,6 +233,7 @@ namespace JT_Transport.Controllers
     /// <response code="200">User verified successfully</response>
     /// <response code="401">User not found</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level1Access")]
     [HttpPost("verifyuser/{adminname}/{username}")]
     [ProducesResponseType(typeof(ResponseData), 200)]
     public ActionResult VerifyUser(string adminname, string username)
@@ -278,6 +282,7 @@ namespace JT_Transport.Controllers
     /// <response code="200">User deactivated successfully</response>
     /// <response code="401">User not found</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level1Access")]
     [HttpDelete("deactivateuser/{adminname}/{username}")]
     public ActionResult DeactivateUser(string adminname, string username)
     {

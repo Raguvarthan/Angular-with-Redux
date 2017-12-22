@@ -180,6 +180,7 @@ namespace JT_Transport.Controllers
     /// <response code="402">Bad Request</response>
     /// <response code="400">Process ran into an exception</response>
     /// <returns></returns>
+    [Authorize("Level1Access")]
     [HttpPost("{username}")]
     [SwaggerRequestExample(typeof(TripExpenceInfo), typeof(Example_InsertTripExpenseInfo))]
     [ProducesResponseType(typeof(ResponseData), 200)]
@@ -260,6 +261,7 @@ namespace JT_Transport.Controllers
     /// <response code="401">Bad request</response>
     /// <response code="404">Trip expense info not found</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level1Access")]
     [HttpDelete("{username}/{tripExpenseId}")]
     public ActionResult MakeTripExpenseInfoInActive(string username, string tripExpenseId)
     {
@@ -321,6 +323,7 @@ namespace JT_Transport.Controllers
     /// <response code="401">Bad request</response>
     /// <response code="404">Trip expense info not found</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level1Access")]
     [HttpPut("makeactive/{username}/{tripExpenseId}")]
     public ActionResult MakeTripExpenseInfoActive(string username, string tripExpenseId)
     {

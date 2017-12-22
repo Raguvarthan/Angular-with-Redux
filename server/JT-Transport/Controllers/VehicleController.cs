@@ -84,11 +84,12 @@ namespace JT_Transport.Controllers
           {
             vehicleInfo.Add(BsonSerializer.Deserialize<VehicleInfo>(vehicle));
           }
+          var sortedList = vehicleInfo.OrderBy(o => o.VehicleNo).ToList();
           return Ok(new ResponseData
           {
             Code = "200",
             Message = "Success",
-            Data = vehicleInfo
+            Data = sortedList
           });
         }
         else
@@ -170,6 +171,7 @@ namespace JT_Transport.Controllers
     /// <response code="403">Bad Request</response>
     /// <response code="400">Process ran into an exception</response>
     /// <returns></returns>
+    [Authorize("Level1Access")]
     [HttpPost("{username}")]
     [SwaggerRequestExample(typeof(VehicleInfo), typeof(Example_InsertVehicleInfo))]
     [ProducesResponseType(typeof(ResponseData), 200)]
@@ -263,6 +265,7 @@ namespace JT_Transport.Controllers
     /// <response code="402">Bad Request</response>
     /// <response code="404">Vehicle not found</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level1Access")]
     [HttpPut("{username}/{vehicleId}")]
     [SwaggerRequestExample(typeof(ExampleModel_VehicleInfo), typeof(Example_UpdateVehicleInfo))]
     [ProducesResponseType(typeof(ResponseData), 200)]
@@ -408,6 +411,7 @@ namespace JT_Transport.Controllers
     /// <response code="401">Bad Request</response>
     /// <response code="404">Vehicle info not found</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level1Access")]
     [HttpDelete("{username}/{vehicleId}")]
     [ProducesResponseType(typeof(ResponseData), 200)]
     public ActionResult MakeVehicleInfoInActive(string username, string vehicleId)
@@ -470,6 +474,7 @@ namespace JT_Transport.Controllers
     /// <response code="401">Bad Request</response>
     /// <response code="404">Vehicle info not found</response>
     /// <response code="400">Process ran into an exception</response>
+    [Authorize("Level1Access")]
     [HttpPut("makeactive/{username}/{vehicleId}")]
     [ProducesResponseType(typeof(ResponseData), 200)]
     public ActionResult MakeVehicleInfoActive(string username, string vehicleId)

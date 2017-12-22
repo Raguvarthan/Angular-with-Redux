@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using JT_Transport.Model;
-using Microsoft.CodeAnalysis;
 using Swashbuckle.AspNetCore.Examples;
 
 namespace JT_Transport.Swagger
@@ -20,7 +19,7 @@ namespace JT_Transport.Swagger
       {
         VendorName = "VendorName",
         ContactName = "ContactName",
-        ContactNo = +9112341234,
+        ContactNo = "+9112341234",
         Address = "Address"
       };
     }
@@ -38,7 +37,7 @@ namespace JT_Transport.Swagger
       {
         VendorName = "NewVendorName",
         ContactName = "NewContactName",
-        ContactNo = +9112341234,
+        ContactNo = "+9112341234",
         Address = "NewAddress"
       };
     }
@@ -270,7 +269,7 @@ namespace JT_Transport.Swagger
       {
         OfficeName = "OfficeName",
         ContactName = "ContactName",
-        ContactNo = 9112341234,
+        ContactNo = "9112341234",
         Address = "Address",
       };
     }
@@ -288,7 +287,7 @@ namespace JT_Transport.Swagger
       {
         OfficeName = "OfficeName",
         ContactName = "ContactName",
-        ContactNo = 9112341234,
+        ContactNo = "9112341234",
         Address = "Address",
       };
     }
@@ -423,7 +422,7 @@ namespace JT_Transport.Swagger
       return new
       {
         DriverName = "DriverName",
-        ContactNo = 12341234,
+        ContactNo = "12341234",
         Address = "Address"
       };
     }
@@ -443,7 +442,7 @@ namespace JT_Transport.Swagger
       return new ExampleModel_DriverInfo
       {
         DriverName = "NewDriverName",
-        ContactNo = 23452345,
+        ContactNo = "23452345",
         Address = "NewAddress",
         IsActive = true,
       };
