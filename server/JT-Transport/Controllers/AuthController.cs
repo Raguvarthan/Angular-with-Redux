@@ -47,6 +47,10 @@ namespace JT_Transport.Controllers
     /// <summary>
     /// 
     /// </summary>
+    public BsonDocument update;
+    /// <summary>
+    /// 
+    /// </summary>
     public IMongoCollection<ActivityLoggerModel> activitylog_collection;
     /// <summary></summary>
     private IOptions<Audience> _settings;
@@ -223,6 +227,87 @@ namespace JT_Transport.Controllers
     }
 
     /// <summary>
+    /// Change passowrd for existing user
+    /// </summary>
+    /// <param name="data">User credentials</param>    /// 
+    /// <param name="adminname">Name of admin</param>
+    /// <returns></returns>
+    /// <response code="200">Password changed successfully</response>
+    /// <response code="401">User not verified</response>
+    /// <response code="402">User not active</response>
+    /// <response code="404">User not found</response>
+    /// <response code="400">Process ran into an exception</response>
+    [HttpPut("changepassword/{adminname}")]
+    [SwaggerRequestExample(typeof(LoginModel), typeof(Example_LoginModel))]
+    [ProducesResponseType(typeof(ResponseData), 200)]
+    public ActionResult ChangePassword([FromBody]LoginModel data, string adminname)
+    {
+      try
+      {
+        var getUser = MH.GetSingleObject(users_collection, "UserName", data.UserName, null, null).Result;
+        if (getUser != null)
+        {
+          var userDetails = BsonSerializer.Deserialize<RegisterModel>(getUser);
+          if (userDetails.UserVerified == false)
+          {
+            return BadRequest(new ResponseData
+            {
+              Code = "401",
+              Message = "User not verified"
+            });
+          }
+          else if (userDetails.IsActive == false)
+          {
+            return BadRequest(new ResponseData
+            {
+              Code = "402",
+              Message = "User not active"
+            });
+          }
+          else
+          {
+            RegisterModel registerModel = new RegisterModel
+            {
+              FullName = userDetails.FullName,
+              UserRole = userDetails.UserRole,
+              UserVerified = userDetails.UserVerified,
+              IsActive = userDetails.IsActive,
+              UserName = data.UserName,
+              Password = data.Password
+            };
+            registerModel.Password = passwordHasher.HashPassword(registerModel, registerModel.Password);
+            var updateDefinition = Builders<BsonDocument>.Update.Set("Password", registerModel.Password);
+            update = MH.UpdateSingleObject(users_collection, "UserName", data.UserName, null, null, updateDefinition);
+            AL.CreateLog(adminname, "ChangePassword", userDetails, registerModel, activitylog_collection);
+            return Ok(new ResponseData
+            {
+              Code = "200",
+              Message = "Password changed successfully"
+            });
+          }
+        }
+        else
+        {
+          return BadRequest(new ResponseData
+          {
+            Code = "404",
+            Message = "User not found"
+          });
+        }
+      }
+      catch (Exception ex)
+      {
+        SL.CreateLog("AuthController", "ChangePassword", ex.Message);
+        return BadRequest(new ResponseData
+        {
+          Code = "400",
+          Message = "Failed",
+          Data = ex.Message
+        });
+      }
+    }
+
+    /// <summary>
     /// Verify registered user
     /// </summary>
     /// <param name="adminname">Name of admin who verifies the user</param>
@@ -231,8 +316,8 @@ namespace JT_Transport.Controllers
     /// <response code="200">User verified successfully</response>
     /// <response code="401">User not found</response>
     /// <response code="400">Process ran into an exception</response>
-    [Authorize("Level1Access")]
-    [HttpPost("verifyuser/{adminname}/{username}")]
+    //[Authorize("Level1Access")]
+    [HttpPut("verifyuser/{adminname}/{username}")]
     [ProducesResponseType(typeof(ResponseData), 200)]
     public ActionResult VerifyUser(string adminname, string username)
     {
