@@ -223,5 +223,15 @@ namespace JT_Transport.Model
     /// </summary>
     [Required]
     public string PaidTo { get; set; }
+    /// <summary>
+    /// Unloading charges
+    /// </summary>
+    [Required]
+    public long? UnloadingCharges { get; set; }
+    /// <summary>
+    /// Rounf off amount
+    /// </summary>
+    [Required]
+    public long? RoundOffAmount { get; set; }
   }
 }

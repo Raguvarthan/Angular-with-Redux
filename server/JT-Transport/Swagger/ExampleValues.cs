@@ -150,10 +150,13 @@ namespace JT_Transport.Swagger
     /// <summary></summary>
     public object GetExamples()
     {
-      return new
+      return new 
       {
         AmountReceived = 1000,
-        PaidTo = "Driver"
+        PaidTo = "Driver",
+        RoundOffAmount = 0,
+        UnloadingCharges = 0,
+        Date = DateTime.UtcNow
       };
     }
   }

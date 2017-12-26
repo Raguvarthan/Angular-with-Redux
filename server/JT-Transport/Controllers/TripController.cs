@@ -391,7 +391,7 @@ namespace JT_Transport.Controllers
     /// <response code="402">Paid amount is higher than the balance amount</response>
     /// <response code="404">Trip not found</response>
     /// <response code="400">Process ran into an exception</response>
-    [Authorize("Level1Access")]
+    //[Authorize("Level1Access")]
     [HttpPut("makepayment/{username}/{tripId}")]
     [SwaggerRequestExample(typeof(PaymentDetails), typeof(Example_UpdatePaymentInfo))]
     public ActionResult MakePaymentForTrip([FromBody] PaymentDetails data, string username, string tripId)
@@ -424,10 +424,20 @@ namespace JT_Transport.Controllers
                     paymentList.Add(payment);
                   }
                 }
-                var balanceAmount = tripDetails.BalanceAmount - data.AmountReceived;
+                if (tripDetails.BalanceAmount < (data.AmountReceived + data.UnloadingCharges + data.RoundOffAmount))
+                {
+                  return BadRequest(new ResponseData
+                  {
+                    Code = "403",
+                    Message = "Paid amount is higher than the balance amount"
+                  });
+                }
+                var balanceAmount = tripDetails.BalanceAmount - (data.AmountReceived + data.UnloadingCharges + data.RoundOffAmount);
                 data.RunningBalanceAmount = balanceAmount;
                 paymentList.Add(data);
                 var updateBalanceAmount = MH.UpdateSingleObject(tripinfo_collection, "TripId", tripId, null, null, Builders<BsonDocument>.Update.Set("BalanceAmount", balanceAmount));
+                var updateUnloadingCharges = MH.UpdateSingleObject(tripinfo_collection, "TripId", tripId, null, null, Builders<BsonDocument>.Update.Set("UnloadingCharges", data.UnloadingCharges));
+                var updateRoundOffAmount = MH.UpdateSingleObject(tripinfo_collection, "TripId", tripId, null, null, Builders<BsonDocument>.Update.Set("RoundOffAmount", data.RoundOffAmount));
                 var paidAmount = tripDetails.PaidAmount + data.AmountReceived;
                 var updatePaidAmount = MH.UpdateSingleObject(tripinfo_collection, "TripId", tripId, null, null, Builders<BsonDocument>.Update.Set("PaidAmount", paidAmount));
                 var updatePaymentInfo = MH.UpdateSingleObject(tripinfo_collection, "TripId", tripId, null, null, Builders<BsonDocument>.Update.Set("PaymentInfo", paymentList));
