@@ -110,12 +110,29 @@ namespace JT_Transport.Swagger
   /// <summary>
   /// 
   /// </summary>
+  public class Example_GetTripInfoWithFilter : IExamplesProvider
+  {
+    /// <summary></summary>
+    public object GetExamples()
+    {
+      return new TripInfo_FilterModel
+      {
+        VehicleNo = "TN-38-CT-2728",
+        FromDate = DateTime.UtcNow.AddDays(5),
+        ToDate = DateTime.UtcNow
+      };
+    }
+  }
+
+  /// <summary>
+  /// 
+  /// </summary>
   public class Example_InsertTripInfo : IExamplesProvider
   {
     /// <summary></summary>
     public object GetExamples()
     {
-      return new
+      return new 
       {
         VehicleNo = "TN-38-U-9808",
         VendorName = "VendorName",
@@ -137,7 +154,8 @@ namespace JT_Transport.Swagger
         AdvanceAmount = 5000,
         PaidAmount = 5000,
         VehicleAmount = 18000,
-        BalanceAmount = 13000
+        BalanceAmount = 13000,
+        TripType = "Local"
       };
     }
   }

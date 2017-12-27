@@ -6,6 +6,7 @@ using JT_Transport.Logger;
 using MongoDB.Driver;
 using SL = JT_Transport.Logger.ServerSideLogger;
 using MH = JT_Transport.Helper.MongoHelper;
+using System.Collections.Generic;
 
 namespace JT_Transport.Helper
 {
@@ -49,6 +50,28 @@ namespace JT_Transport.Helper
         SL.CreateLog("GlobalHelper", "GetIpConfig", ex.Message);
         return null;
       }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="StartingDate"></param>
+    /// <param name="EndingDate"></param>
+    /// <returns></returns>
+    public static List<DateTime> GetDateRange(DateTime StartingDate, DateTime EndingDate)
+    {
+      if (StartingDate > EndingDate)
+      {
+        return null;
+      }
+      List<DateTime> dateList = new List<DateTime>();
+      DateTime tmpDate = StartingDate;
+      do
+      {
+        dateList.Add(tmpDate);
+        tmpDate = tmpDate.AddDays(1);
+      } while (tmpDate <= EndingDate);
+      return dateList;
     }
   }
 }

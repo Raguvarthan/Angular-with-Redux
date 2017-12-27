@@ -19,6 +19,10 @@ namespace JT_Transport.Model
     /// </summary>
     public string TripId { get; set; }
     /// <summary>
+    /// Type of trip
+    /// </summary>
+    public string TripType { get; set; }
+    /// <summary>
     /// Vehicle number
     /// </summary>
     [Required]

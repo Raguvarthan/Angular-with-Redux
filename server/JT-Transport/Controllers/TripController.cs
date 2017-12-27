@@ -80,11 +80,12 @@ namespace JT_Transport.Controllers
           {
             tripInfo.Add(BsonSerializer.Deserialize<TripInfo>(trip));
           }
+          var sortedList = tripInfo.OrderBy(o => o.LoadDate).ToList();
           return Ok(new ResponseData
           {
             Code = "200",
             Message = "Success",
-            Data = tripInfo
+            Data = sortedList
           });
         }
         else
@@ -99,6 +100,275 @@ namespace JT_Transport.Controllers
       catch (Exception ex)
       {
         SL.CreateLog("TripController", "GetAllTrips", ex.Message);
+        return BadRequest(new ResponseData
+        {
+          Code = "400",
+          Message = "Failed",
+          Data = ex.Message
+        });
+      }
+    }
+
+    /// <summary>
+    /// Get trips and their info with filter
+    /// </summary>
+    /// <param name="triptype">Type of trip</param>
+    /// <param name="vehicleno">Vehicle No to filter</param>
+    /// <param name="fromdate">From date to filter</param>
+    /// <param name="todate">To date to filter</param>
+    /// <response code="200">Returns trips and their info with filter</response>
+    /// <response code="404">No trips found</response>
+    /// <response code="400">Process ran into an exception</response>
+    /// <returns></returns>
+    [HttpGet("gettripwithfilter/{triptype}/vehicleno/fromdate/todate")]
+    [SwaggerRequestExample(typeof(TripInfo_FilterModel), typeof(Example_GetTripInfoWithFilter))]
+    [ProducesResponseType(typeof(ResponseData), 200)]
+    public ActionResult GetTripsWithFilter(string triptype,string vehicleno, DateTime? fromdate, DateTime? todate)
+    {
+      try
+      {
+        if(triptype != "Local" && triptype != "Line")
+        {
+          return BadRequest(new ResponseData
+          {
+            Code = "401",
+            Message = "Bad Request. Invalid trip type"
+          });
+        }
+        if (vehicleno == null && fromdate == null && todate == null)
+        {
+          var getTrips = MH.GetListOfObjects(tripinfo_collection, "TripType", triptype, null, null).Result;
+          if (getTrips != null)
+          {
+            List<TripInfo> tripInfo = new List<TripInfo>();
+            var currentDate = DateTime.Now;
+            List<DateTime> dateList = GH.GetDateRange(DateTime.UtcNow.AddDays(-2).Date, DateTime.UtcNow.Date);
+            foreach (var trip in getTrips)
+            {
+              var tripData = BsonSerializer.Deserialize<TripInfo>(trip);
+              if (tripData.LoadDate != null && dateList.Contains(tripData.LoadDate.Value.Date))
+              {
+                tripInfo.Add(tripData);
+              }
+            }
+            var sortedList = tripInfo.OrderBy(o => o.LoadDate).ToList();
+            if (tripInfo.Count == 0)
+            {
+              return BadRequest(new ResponseData
+              {
+                Code = "404",
+                Message = "No trips found"
+              });
+            }
+            else
+            {
+              return Ok(new ResponseData
+              {
+                Code = "200",
+                Message = "Success",
+                Data = sortedList
+              });
+            }
+          }
+          else
+          {
+            return BadRequest(new ResponseData
+            {
+              Code = "404",
+              Message = "No trips found"
+            });
+          }
+        }
+        else
+        {
+          if (vehicleno != null)
+          {
+            var getTripsWithVehicleNo = MH.GetListOfObjects(tripinfo_collection, "VehicleNo", vehicleno, "TripType", triptype).Result;
+            if (fromdate == null && todate == null)
+            {
+              var date = DateTime.UtcNow.Date;
+              if (getTripsWithVehicleNo != null)
+              {
+                List<TripInfo> tripInfo = new List<TripInfo>();
+                foreach (var trip in getTripsWithVehicleNo)
+                {
+                  tripInfo.Add(BsonSerializer.Deserialize<TripInfo>(trip));
+                }
+                var sortedList = tripInfo.OrderBy(o => o.LoadDate).ToList();
+                return Ok(new ResponseData
+                {
+                  Code = "200",
+                  Message = "Success",
+                  Data = sortedList
+                });
+              }
+              else
+              {
+                return BadRequest(new ResponseData
+                {
+                  Code = "404",
+                  Message = "No trips found"
+                });
+              }
+            }
+            else if (fromdate != null && todate == null)
+            {
+              var dateList = GH.GetDateRange(fromdate.Value.Date, DateTime.UtcNow.AddDays(1).Date);
+              List<TripInfo> tripList = new List<TripInfo>();
+              foreach (var trip in getTripsWithVehicleNo)
+              {
+                var tripData = BsonSerializer.Deserialize<TripInfo>(trip);
+                if (tripData.LoadDate != null && dateList.Contains(tripData.LoadDate.Value.Date))
+                {
+                  tripList.Add(tripData);
+                }
+              }
+              if (tripList.Count == 0)
+              {
+                {
+                  return BadRequest(new ResponseData
+                  {
+                    Code = "404",
+                    Message = "No trips found"
+                  });
+                }
+              }
+              else
+              {
+                var sortedList = tripList.OrderBy(o => o.LoadDate).ToList();
+                return Ok(new ResponseData
+                {
+                  Code = "200",
+                  Message = "Success",
+                  Data = sortedList
+                });
+              }
+            }
+            else if (fromdate == null)
+            {
+              return BadRequest(new ResponseData
+              {
+                Code = "400",
+                Message = "Bad Request"
+              });
+            }
+            else
+            {
+              var dateList = GH.GetDateRange(fromdate.Value.Date, todate.Value.AddDays(1).Date);
+              List<TripInfo> tripList = new List<TripInfo>();
+              foreach (var trip in getTripsWithVehicleNo)
+              {
+                var tripData = BsonSerializer.Deserialize<TripInfo>(trip);
+                if (tripData.LoadDate != null && dateList.Contains(tripData.LoadDate.Value.Date))
+                {
+                  tripList.Add(tripData);
+                }
+              }
+              if (tripList.Count == 0)
+              {
+                {
+                  return BadRequest(new ResponseData
+                  {
+                    Code = "404",
+                    Message = "No trips found"
+                  });
+                }
+              }
+              else
+              {
+                var sortedList = tripList.OrderBy(o => o.LoadDate).ToList();
+                return Ok(new ResponseData
+                {
+                  Code = "200",
+                  Message = "Success",
+                  Data = sortedList
+                });
+              }
+            }
+          }
+          else
+          {
+            var getTripsWithOutVehicleNo = MH.GetListOfObjects(tripinfo_collection, "TripType", triptype, null, null).Result;
+            if (fromdate != null && todate == null)
+            {
+              var dateList = GH.GetDateRange(fromdate.Value.Date, DateTime.UtcNow.AddDays(1).Date);
+              List<TripInfo> tripList = new List<TripInfo>();
+              foreach (var trip in getTripsWithOutVehicleNo)
+              {
+                var tripData = BsonSerializer.Deserialize<TripInfo>(trip);
+                if (tripData.LoadDate != null && dateList.Contains(tripData.LoadDate.Value.Date))
+                {
+                  tripList.Add(tripData);
+                }
+              }
+              if (tripList.Count == 0)
+              {
+                {
+                  return BadRequest(new ResponseData
+                  {
+                    Code = "404",
+                    Message = "No trips found"
+                  });
+                }
+              }
+              else
+              {
+                var sortedList = tripList.OrderBy(o => o.LoadDate).ToList();
+                return Ok(new ResponseData
+                {
+                  Code = "200",
+                  Message = "Success",
+                  Data = sortedList
+                });
+              }
+            }
+            else if (fromdate == null)
+            {
+              return BadRequest(new ResponseData
+              {
+                Code = "400",
+                Message = "Bad Request"
+              });
+            }
+            else
+            {
+              var dateList = GH.GetDateRange(fromdate.Value.Date, todate.Value.AddDays(1).Date);
+              List<TripInfo> tripList = new List<TripInfo>();
+              foreach (var trip in getTripsWithOutVehicleNo)
+              {
+                var tripData = BsonSerializer.Deserialize<TripInfo>(trip);
+                if (tripData.LoadDate != null && dateList.Contains(tripData.LoadDate.Value.Date))
+                {
+                  tripList.Add(tripData);
+                }
+              }
+              if (tripList.Count == 0)
+              {
+                {
+                  return BadRequest(new ResponseData
+                  {
+                    Code = "404",
+                    Message = "No trips found"
+                  });
+                }
+              }
+              else
+              {
+                var sortedList = tripList.OrderBy(o => o.LoadDate).ToList();
+                return Ok(new ResponseData
+                {
+                  Code = "200",
+                  Message = "Success",
+                  Data = sortedList
+                });
+              }
+            }
+          }
+        }
+      }
+      catch (Exception ex)
+      {
+        SL.CreateLog("TripController", "GetTripsWithFilter", ex.Message);
         return BadRequest(new ResponseData
         {
           Code = "400",
@@ -239,9 +509,10 @@ namespace JT_Transport.Controllers
     /// <response code="200">Trip info inserted successfully</response>
     /// <response code="401">Trip info with same id is already added</response>
     /// <response code="402">Bad request</response>
+    /// <response code="403">Bad request. Invalid trip type</response>
     /// <response code="400">Process ran into an exception</response>
     /// <returns></returns>
-    //[Authorize("Level1Access")]
+    [Authorize("Level1Access")]
     [HttpPost("{username}")]
     [SwaggerRequestExample(typeof(TripInfo), typeof(Example_InsertTripInfo))]
     [ProducesResponseType(typeof(ResponseData), 200)]
@@ -251,44 +522,66 @@ namespace JT_Transport.Controllers
       {
         if (data != null && username != null)
         {
-          #region Calculate trip id
-          var getTrips = MH.GetListOfObjects(tripinfo_collection, null, null, null, null).Result;
-          if (getTrips.Count == 0)
-          {
-            data.TripId = "TP-1";
-          }
-          else
-          {
-            List<long> idList = new List<long>();
-            foreach (var trip in getTrips)
-            {
-              TripInfo tripInfo = BsonSerializer.Deserialize<TripInfo>(trip);
-              long seperatedId = Convert.ToInt64(tripInfo.TripId.Substring(tripInfo.TripId.LastIndexOf('-') + 1));
-              idList.Add(seperatedId);
-            }
-            var maxId = idList.Max();
-            data.TripId = "TP-" + (maxId + 1);
-          }
-          #endregion
-          data.IsActive = true;
-          var insert = MH.InsertNewTripInfo(data, tripinfoCollection);
-          if (insert == true)
-          {
-            AL.CreateLog(username, "InsertTripInfo", null, data, activitylog_collection);
-            return Ok(new ResponseData
-            {
-              Code = "200",
-              Message = "Inserted",
-              Data = data
-            });
-          }
-          else
+          if (data.TripType == null)
           {
             return BadRequest(new ResponseData
             {
-              Code = "401",
-              Message = "Trip info with same id is already added"
+              Code = "403",
+              Message = "Bad request. Invalid trip type"
             });
+          }
+          else
+          {
+            if (data.TripType != "Local" && data.TripType != "Line")
+            {
+              return BadRequest(new ResponseData
+              {
+                Code = "403",
+                Message = "Bad request. Invalid trip type"
+              });
+            }
+            else
+            {
+              #region Calculate trip id
+              var getTrips = MH.GetListOfObjects(tripinfo_collection, null, null, null, null).Result;
+              if (getTrips.Count == 0)
+              {
+                data.TripId = "TP-1";
+              }
+              else
+              {
+                List<long> idList = new List<long>();
+                foreach (var trip in getTrips)
+                {
+                  TripInfo tripInfo = BsonSerializer.Deserialize<TripInfo>(trip);
+                  long seperatedId = Convert.ToInt64(tripInfo.TripId.Substring(tripInfo.TripId.LastIndexOf('-') + 1));
+                  idList.Add(seperatedId);
+                }
+                var maxId = idList.Max();
+                data.TripId = "TP-" + (maxId + 1);
+              }
+              #endregion
+              data.IsActive = true;
+              var insert = MH.InsertNewTripInfo(data, tripinfoCollection);
+              if (insert == true)
+              {
+                AL.CreateLog(username, "InsertTripInfo", null, data, activitylog_collection);
+                return Ok(new ResponseData
+                {
+                  Code = "200",
+                  Message = "Inserted",
+                  Data = data
+                });
+              }
+              else
+              {
+                return BadRequest(new ResponseData
+                {
+                  Code = "401",
+                  Message = "Trip info with same id is already added"
+                });
+              }
+            }
           }
         }
         else
@@ -391,7 +684,7 @@ namespace JT_Transport.Controllers
     /// <response code="402">Paid amount is higher than the balance amount</response>
     /// <response code="404">Trip not found</response>
     /// <response code="400">Process ran into an exception</response>
-    //[Authorize("Level1Access")]
+    [Authorize("Level1Access")]
     [HttpPut("makepayment/{username}/{tripId}")]
     [SwaggerRequestExample(typeof(PaymentDetails), typeof(Example_UpdatePaymentInfo))]
     public ActionResult MakePaymentForTrip([FromBody] PaymentDetails data, string username, string tripId)
@@ -432,14 +725,15 @@ namespace JT_Transport.Controllers
                     Message = "Paid amount is higher than the balance amount"
                   });
                 }
-                var balanceAmount = tripDetails.BalanceAmount - (data.AmountReceived + data.UnloadingCharges + data.RoundOffAmount);
+                var paidAmount = tripDetails.PaidAmount + data.AmountReceived;
+                var updatePaidAmount = MH.UpdateSingleObject(tripinfo_collection, "TripId", tripId, null, null, Builders<BsonDocument>.Update.Set("PaidAmount", paidAmount));
+                var updatedTripDetails = BsonSerializer.Deserialize<TripInfo>(MH.GetSingleObject(tripinfo_collection, "TripId", tripId, null, null).Result);
+                var balanceAmount = updatedTripDetails.VehicleAmount - (updatedTripDetails.PaidAmount + data.UnloadingCharges + data.RoundOffAmount);
                 data.RunningBalanceAmount = balanceAmount;
                 paymentList.Add(data);
                 var updateBalanceAmount = MH.UpdateSingleObject(tripinfo_collection, "TripId", tripId, null, null, Builders<BsonDocument>.Update.Set("BalanceAmount", balanceAmount));
                 var updateUnloadingCharges = MH.UpdateSingleObject(tripinfo_collection, "TripId", tripId, null, null, Builders<BsonDocument>.Update.Set("UnloadingCharges", data.UnloadingCharges));
                 var updateRoundOffAmount = MH.UpdateSingleObject(tripinfo_collection, "TripId", tripId, null, null, Builders<BsonDocument>.Update.Set("RoundOffAmount", data.RoundOffAmount));
-                var paidAmount = tripDetails.PaidAmount + data.AmountReceived;
-                var updatePaidAmount = MH.UpdateSingleObject(tripinfo_collection, "TripId", tripId, null, null, Builders<BsonDocument>.Update.Set("PaidAmount", paidAmount));
                 var updatePaymentInfo = MH.UpdateSingleObject(tripinfo_collection, "TripId", tripId, null, null, Builders<BsonDocument>.Update.Set("PaymentInfo", paymentList));
                 if (updateBalanceAmount != null && updatePaidAmount != null && updatePaymentInfo != null)
                 {

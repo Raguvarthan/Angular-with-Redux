@@ -526,5 +526,104 @@ namespace JT_Transport.Controllers
         });
       }
     }
+
+
+    /// <summary>
+    /// Get the dates for renewal of insurance, FC, NP Tax and Permit for vehicles 
+    /// </summary>
+    /// <response code="200">Returns info of vehicle with given vehicle id</response>
+    /// <response code="401">Bad Request</response>
+    /// <response code="404">Vehicle not found</response>
+    /// <response code="400">Process ran into an exception</response>
+    /// <returns></returns>
+    [HttpGet("notificationforrenewal")]
+    [ProducesResponseType(typeof(ResponseData), 200)]
+    public ActionResult NotificationForRenewal()
+    {
+      try
+      {
+        var getVehicles = MH.GetListOfObjects(vehicleinfo_collection, null, null, null, null).Result;
+        if (getVehicles != null)
+        {
+          List<RenewalDetails> insuranceRenewalList = new List<RenewalDetails>();
+          List<RenewalDetails> fcRenewalList = new List<RenewalDetails>();
+          List<RenewalDetails> npTaxRenewalList = new List<RenewalDetails>();
+          List<RenewalDetails> permitRenewalList = new List<RenewalDetails>();
+          var currentDate = DateTime.UtcNow.Date;
+          var dateList = GH.GetDateRange(currentDate.Date, currentDate.AddDays(20).Date);
+          foreach(var vehicle in getVehicles)
+          {
+            var vehicleData = BsonSerializer.Deserialize<VehicleInfo>(vehicle);
+            if(vehicleData.InsuranceDate != null && dateList.Contains(vehicleData.InsuranceDate.Value.Date))
+            {
+              insuranceRenewalList.Add(new RenewalDetails { VehicleNo = vehicleData.VehicleNo,Date=vehicleData.InsuranceDate.Value.Date });
+            }
+            if (vehicleData.FCDate != null && dateList.Contains(vehicleData.FCDate.Value.Date))
+            {
+              fcRenewalList.Add(new RenewalDetails { VehicleNo = vehicleData.VehicleNo, Date = vehicleData.FCDate.Value.Date });
+            }
+            if (vehicleData.NPTaxDate != null && dateList.Contains(vehicleData.NPTaxDate.Value.Date))
+            {
+              npTaxRenewalList.Add(new RenewalDetails { VehicleNo = vehicleData.VehicleNo, Date = vehicleData.NPTaxDate.Value.Date });
+            }
+            if (vehicleData.PermitDate != null && dateList.Contains(vehicleData.PermitDate.Value.Date))
+            {
+              permitRenewalList.Add(new RenewalDetails { VehicleNo = vehicleData.VehicleNo, Date = vehicleData.PermitDate.Value.Date });
+            }
+          }
+          List<RenewalDetails> sortedInsuranceRenewalList = new List<RenewalDetails>();
+          List<RenewalDetails> sortedFCRenewalList = new List<RenewalDetails>();
+          List<RenewalDetails> sortedNPTaxRenewalList = new List<RenewalDetails>();
+          List<RenewalDetails> sortedPermitRenewalList = new List<RenewalDetails>();
+          if (insuranceRenewalList != null)
+          {
+            sortedInsuranceRenewalList = insuranceRenewalList.OrderBy(o => o.VehicleNo).ToList();
+          }
+          if (fcRenewalList != null)
+          {
+            sortedFCRenewalList = fcRenewalList.OrderBy(o => o.VehicleNo).ToList();
+          }
+          if (npTaxRenewalList != null)
+          {
+            sortedNPTaxRenewalList = npTaxRenewalList.OrderBy(o => o.VehicleNo).ToList();
+          }
+          if (permitRenewalList != null)
+          {
+            sortedPermitRenewalList = permitRenewalList.OrderBy(o => o.VehicleNo).ToList();
+          }
+          RenewalList renewalDateDetails = new RenewalList
+          {
+            InsuranceRenewalList = sortedInsuranceRenewalList,
+            FCRenewalList = sortedFCRenewalList,
+            NPTaxRenewalList = sortedNPTaxRenewalList,
+            PermitRenewlList = sortedPermitRenewalList
+        };
+          return Ok(new ResponseData
+          {
+            Code = "200",
+            Message = "Success",
+            Data = renewalDateDetails
+          });
+        }
+        else
+        {
+          return BadRequest(new ResponseData
+          {
+            Code = "404",
+            Message = "No vehicles found"
+          });
+        }
+      }
+      catch (Exception ex)
+      {
+        SL.CreateLog("VehicleController", "GetInfoOfVehicle", ex.Message);
+        return BadRequest(new ResponseData
+        {
+          Code = "400",
+          Message = "Failed",
+          Data = ex.Message
+        });
+      }
+    }
   }
 }
