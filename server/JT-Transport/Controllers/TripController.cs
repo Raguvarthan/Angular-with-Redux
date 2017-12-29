@@ -123,11 +123,11 @@ namespace JT_Transport.Controllers
     [HttpGet("gettripwithfilter/{triptype}/vehicleno/fromdate/todate")]
     [SwaggerRequestExample(typeof(TripInfo_FilterModel), typeof(Example_GetTripInfoWithFilter))]
     [ProducesResponseType(typeof(ResponseData), 200)]
-    public ActionResult GetTripsWithFilter(string triptype,string vehicleno, DateTime? fromdate, DateTime? todate)
+    public ActionResult GetTripsWithFilter(string triptype, string vehicleno, DateTime? fromdate, DateTime? todate)
     {
       try
       {
-        if(triptype != "Local" && triptype != "Line")
+        if (triptype != "Local" && triptype != "Line")
         {
           return BadRequest(new ResponseData
           {
@@ -244,7 +244,7 @@ namespace JT_Transport.Controllers
                 });
               }
             }
-            else if (fromdate == null)
+            else if (fromdate == null && todate != null)
             {
               return BadRequest(new ResponseData
               {
@@ -322,7 +322,7 @@ namespace JT_Transport.Controllers
                 });
               }
             }
-            else if (fromdate == null)
+            else if (fromdate == null && todate != null)
             {
               return BadRequest(new ResponseData
               {
@@ -492,6 +492,138 @@ namespace JT_Transport.Controllers
       catch (Exception ex)
       {
         SL.CreateLog("TripController", "GetTripInfoWithUnPaidBalanceAmount", ex.Message);
+        return BadRequest(new ResponseData
+        {
+          Code = "400",
+          Message = "Failed",
+          Data = ex.Message
+        });
+      }
+    }
+
+    /// <summary>
+    /// Get all the trips with unpaid balance and their info with filter
+    /// </summary>
+    /// <param name="fromdate">From date to filter</param>
+    /// <param name="todate">To date to filter</param>
+    /// <response code="200">Returns info of trip with unpaid balance amount</response>
+    /// <response code="401">No trip with balance amount unpaid is found</response>
+    /// <response code="404">No trip infos found</response>
+    /// <response code="400">Process ran into an exception</response>
+    /// <returns></returns>
+    [HttpGet("unpaidbalance/fromdate/todate")]
+    [ProducesResponseType(typeof(ResponseData), 200)]
+    public ActionResult GetTripInfoWithUnPaidBalanceAmountWithFliter(DateTime? fromdate, DateTime? todate)
+    {
+      try
+      {
+        List<TripInfo> tripDetailsList = new List<TripInfo>();
+        var getTrips = MH.GetListOfObjects(tripinfo_collection, null, null, null, null).Result;
+        if (getTrips == null)
+        {
+          return BadRequest(new ResponseData
+          {
+            Code = "404",
+            Message = "No trips found"
+          });
+        }
+        else
+        {
+          foreach (var trip in getTrips)
+          {
+            var deserlizedData = BsonSerializer.Deserialize<TripInfo>(trip);
+            if (deserlizedData.BalanceAmount > 0)
+            {
+              tripDetailsList.Add(deserlizedData);
+            }
+          }
+        }
+        if (fromdate != null && todate == null)
+        {
+          var dateList = GH.GetDateRange(fromdate.Value.Date, DateTime.UtcNow.AddDays(1).Date);
+          List<TripInfo> tripList = new List<TripInfo>();
+          foreach (var trip in tripDetailsList)
+          {
+            if (trip.LoadDate != null && dateList.Contains(trip.LoadDate.Value.Date))
+            {
+              tripList.Add(trip);
+            }
+          }
+          if (tripList.Count == 0)
+          {
+            {
+              return BadRequest(new ResponseData
+              {
+                Code = "404",
+                Message = "No trips found"
+              });
+            }
+          }
+          else
+          {
+            var sortedList = tripList.OrderBy(o => o.LoadDate).ToList();
+            return Ok(new ResponseData
+            {
+              Code = "200",
+              Message = "Success",
+              Data = sortedList
+            });
+          }
+        }
+        else if (fromdate == null && todate == null)
+        {
+          var sortedList = tripDetailsList.OrderBy(o => o.LoadDate).ToList();
+          return Ok(new ResponseData
+          {
+            Code = "200",
+            Message = "Success",
+            Data = sortedList
+          });
+        }
+        else if (fromdate == null && todate != null)
+        {
+          return BadRequest(new ResponseData
+          {
+            Code = "400",
+            Message = "Bad Request"
+          });
+        }
+        else
+        {
+          var dateList = GH.GetDateRange(fromdate.Value.Date, todate.Value.AddDays(1).Date);
+          List<TripInfo> tripList = new List<TripInfo>();
+          foreach (var trip in tripDetailsList)
+          {
+            if (trip.LoadDate != null && dateList.Contains(trip.LoadDate.Value.Date))
+            {
+              tripList.Add(trip);
+            }
+          }
+          if (tripList.Count == 0)
+          {
+            {
+              return BadRequest(new ResponseData
+              {
+                Code = "404",
+                Message = "No trips found"
+              });
+            }
+          }
+          else
+          {
+            var sortedList = tripList.OrderBy(o => o.LoadDate).ToList();
+            return Ok(new ResponseData
+            {
+              Code = "200",
+              Message = "Success",
+              Data = sortedList
+            });
+          }
+        }
+      }
+      catch (Exception ex)
+      {
+        SL.CreateLog("TripController", "GetTripInfoWithUnPaidBalanceAmountWithFliter", ex.Message);
         return BadRequest(new ResponseData
         {
           Code = "400",

@@ -316,7 +316,7 @@ namespace JT_Transport.Controllers
     /// <response code="200">User verified successfully</response>
     /// <response code="401">User not found</response>
     /// <response code="400">Process ran into an exception</response>
-    //[Authorize("Level1Access")]
+    [Authorize("Level1Access")]
     [HttpPut("verifyuser/{adminname}/{username}")]
     [ProducesResponseType(typeof(ResponseData), 200)]
     public ActionResult VerifyUser(string adminname, string username)
