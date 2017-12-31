@@ -554,21 +554,33 @@ namespace JT_Transport.Controllers
           foreach(var vehicle in getVehicles)
           {
             var vehicleData = BsonSerializer.Deserialize<VehicleInfo>(vehicle);
-            if(vehicleData.InsuranceDate != null && dateList.Contains(vehicleData.InsuranceDate.Value.Date))
+            if (vehicleData.InsuranceDate != null)
             {
-              insuranceRenewalList.Add(new RenewalDetails { VehicleNo = vehicleData.VehicleNo,Date=vehicleData.InsuranceDate.Value.Date });
+              if (vehicleData.InsuranceDate < currentDate || dateList.Contains(vehicleData.InsuranceDate.Value.Date))
+              {
+                insuranceRenewalList.Add(new RenewalDetails { VehicleNo = vehicleData.VehicleNo, Date = vehicleData.InsuranceDate.Value.Date });
+              }
             }
-            if (vehicleData.FCDate != null && dateList.Contains(vehicleData.FCDate.Value.Date))
+            if (vehicleData.FCDate != null)
             {
-              fcRenewalList.Add(new RenewalDetails { VehicleNo = vehicleData.VehicleNo, Date = vehicleData.FCDate.Value.Date });
+              if (vehicleData.FCDate < currentDate || dateList.Contains(vehicleData.FCDate.Value.Date))
+              {
+                fcRenewalList.Add(new RenewalDetails { VehicleNo = vehicleData.VehicleNo, Date = vehicleData.FCDate.Value.Date });
+              }
             }
-            if (vehicleData.NPTaxDate != null && dateList.Contains(vehicleData.NPTaxDate.Value.Date))
+            if (vehicleData.NPTaxDate != null)
             {
-              npTaxRenewalList.Add(new RenewalDetails { VehicleNo = vehicleData.VehicleNo, Date = vehicleData.NPTaxDate.Value.Date });
+              if (vehicleData.NPTaxDate < currentDate && dateList.Contains(vehicleData.NPTaxDate.Value.Date))
+              {
+                npTaxRenewalList.Add(new RenewalDetails { VehicleNo = vehicleData.VehicleNo, Date = vehicleData.NPTaxDate.Value.Date });
+              }
             }
-            if (vehicleData.PermitDate != null && dateList.Contains(vehicleData.PermitDate.Value.Date))
+            if (vehicleData.PermitDate != null)
             {
-              permitRenewalList.Add(new RenewalDetails { VehicleNo = vehicleData.VehicleNo, Date = vehicleData.PermitDate.Value.Date });
+              if (vehicleData.PermitDate < currentDate && dateList.Contains(vehicleData.PermitDate.Value.Date))
+              {
+                permitRenewalList.Add(new RenewalDetails { VehicleNo = vehicleData.VehicleNo, Date = vehicleData.PermitDate.Value.Date });
+              }
             }
           }
           List<RenewalDetails> sortedInsuranceRenewalList = new List<RenewalDetails>();
@@ -577,19 +589,19 @@ namespace JT_Transport.Controllers
           List<RenewalDetails> sortedPermitRenewalList = new List<RenewalDetails>();
           if (insuranceRenewalList != null)
           {
-            sortedInsuranceRenewalList = insuranceRenewalList.OrderBy(o => o.VehicleNo).ToList();
+            sortedInsuranceRenewalList = insuranceRenewalList.OrderBy(o => o.Date).ToList();
           }
           if (fcRenewalList != null)
           {
-            sortedFCRenewalList = fcRenewalList.OrderBy(o => o.VehicleNo).ToList();
+            sortedFCRenewalList = fcRenewalList.OrderBy(o => o.Date).ToList();
           }
           if (npTaxRenewalList != null)
           {
-            sortedNPTaxRenewalList = npTaxRenewalList.OrderBy(o => o.VehicleNo).ToList();
+            sortedNPTaxRenewalList = npTaxRenewalList.OrderBy(o => o.Date).ToList();
           }
           if (permitRenewalList != null)
           {
-            sortedPermitRenewalList = permitRenewalList.OrderBy(o => o.VehicleNo).ToList();
+            sortedPermitRenewalList = permitRenewalList.OrderBy(o => o.Date).ToList();
           }
           RenewalList renewalDateDetails = new RenewalList
           {
