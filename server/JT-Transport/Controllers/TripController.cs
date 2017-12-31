@@ -761,7 +761,7 @@ namespace JT_Transport.Controllers
           var getTrip = MH.GetSingleObject(tripinfo_collection, "TripId", tripId, null, null).Result;
           if (getTrip != null)
           {
-            var delete = MH.DeleteSingleObject(tripinfo_collection, "TripId", tripId, null, null);
+            var delete = await MH.DeleteSingleObject(tripinfo_collection, "TripId", tripId, null, null);
             var tripData = BsonSerializer.Deserialize<TripInfo>(getTrip);
             data.Id = tripData.Id;
             data.TripId = tripData.TripId;
