@@ -89,6 +89,11 @@ namespace JT_Transport.Model
     [Required]
     public DateTime? PermitDate { get; set; }
     /// <summary>
+    /// Driver Name
+    /// </summary>
+    [Required]
+    public string DriverName { get; set; }
+    /// <summary>
     /// Defines if the vehicle is active or not
     /// </summary>
     [Required]

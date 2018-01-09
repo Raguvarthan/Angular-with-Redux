@@ -83,6 +83,10 @@ namespace JT_Transport.Swagger
     /// </summary>
     public string ChasisNumber { get; set; }
     /// <summary>
+    /// Driver Name
+    /// </summary>
+    public string DriverName { get; set; }
+    /// <summary>
     /// Insurance date of vehicle
     /// </summary>
     public DateTime? InsuranceDate { get; set; }

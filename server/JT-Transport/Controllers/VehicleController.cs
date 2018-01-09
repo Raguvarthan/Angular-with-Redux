@@ -348,6 +348,11 @@ namespace JT_Transport.Controllers
               var updateDefinition = Builders<BsonDocument>.Update.Set("PermitDate", data.PermitDate);
               update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
             }
+            if (data.DriverName!= null)
+            {
+              var updateDefinition = Builders<BsonDocument>.Update.Set("DriverName", data.DriverName);
+              update = MH.UpdateSingleObject(vehicleinfo_collection, "VehicleId", vehicleId, null, null, updateDefinition);
+            }
             if (data.IsActive != null)
             {
               var updateDefinition = Builders<BsonDocument>.Update.Set("IsActive", data.IsActive);
@@ -570,14 +575,14 @@ namespace JT_Transport.Controllers
             }
             if (vehicleData.NPTaxDate != null)
             {
-              if (vehicleData.NPTaxDate < currentDate && dateList.Contains(vehicleData.NPTaxDate.Value.Date))
+              if (vehicleData.NPTaxDate < currentDate || dateList.Contains(vehicleData.NPTaxDate.Value.Date))
               {
                 npTaxRenewalList.Add(new RenewalDetails { VehicleNo = vehicleData.VehicleNo, Date = vehicleData.NPTaxDate.Value.Date });
               }
             }
             if (vehicleData.PermitDate != null)
             {
-              if (vehicleData.PermitDate < currentDate && dateList.Contains(vehicleData.PermitDate.Value.Date))
+              if (vehicleData.PermitDate < currentDate || dateList.Contains(vehicleData.PermitDate.Value.Date))
               {
                 permitRenewalList.Add(new RenewalDetails { VehicleNo = vehicleData.VehicleNo, Date = vehicleData.PermitDate.Value.Date });
               }
